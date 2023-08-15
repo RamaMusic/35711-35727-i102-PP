@@ -20,3 +20,5 @@ difP (Poi ax ay) (Poi bx by) = result where
       result = sqrt (fromIntegral (dx * dx + dy * dy))
       dx = ax - bx
       dy = ay - by
+
+      
