@@ -1,7 +1,7 @@
 module Link ( Link, newL, linksL, connectsL, capacityL, delayL )
    where
 
-import City ( City )
+import City ( City, distanceC )
 import Quality ( Quality, capacityQ, delayQ )
 
 data Link = Lin City City Quality deriving (Eq, Show)
@@ -20,4 +20,4 @@ capacityL :: Link -> Int
 capacityL (Lin _ _ quality) = capacityQ quality
 
 delayL :: Link -> Float     -- la demora que sufre una conexion en este canal
-delayL (Lin _ _ quality) = delayQ quality
+delayL (Lin c1 c2 quality) = c1 `distanceC` c2 * delayQ quality
