@@ -1,0 +1,33 @@
+tunel linea 10
+-- Al momento de crear un tunel tenemos que evitar que todos los tuneles tengan una verificación entre sí (o sea, no podemos tener como links linkAB y linkCD; tenemos que tener un BC/AC/CD/BD u otra combinación obligatoriamente)
+-- Dentro del tunel no pueden estar metidos enlaces repetidos (EJ BIEN: link AB; link BC; linkCD | EJ MAL: linkAB, linkBC, link BA)
+
+no verifica
+newR 
+Preguntar como quiere que se creen las regiones, o sea, si quiere que newR sea newR [vacio] [vacio] [vacio] o si quiere que ya arranquen con algo
+ empieza vscia, sifue vaciq
+
+foundR
+Solo tenemos que verificar que la ciudad que vayamos a agregar no esté previamente en la lista de ciudades.
+
+linkR
+Tenemos que verificar que estén ambas ciudades, verificar que AB y BA no estén, o sea, no repetidos
+Tenemos que verificar que si tenés AB y BC, si queres agregar DE tengas antes CD (O sea, que se puedan conectar todas entre sí, puede ser una combinación como AC, etc)
+
+tunelR
+Primero tenemos que enviarle una lista de ciudades y no un link, así que tenemos que ver qué hacemos con esto, preguntar.
+
+¿PathR?
+
+¿linksForR?
+
+connectedR: indica si dos ciudades están conectadas por un túnel, las verificaciones se hicieron antes, me da igual.
+
+delayR: suma de la demora de los túneles.
+
+linkedR: indica si dos ciudades están conectadas por un link, hacer verificaciones
+
+availableCapacityForR: indicar la capacidad disponible entre dos ciudades ¿preguntar?
+que pasa si la region tiene dos tuneles y que uno tenga mas capacidad que el otro, que capacidad le pasamos, la suma?
+
+¿usedCapacityForR?

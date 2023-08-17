@@ -15,10 +15,9 @@ data Point = Poi Int Int deriving (Eq, Show)
 
 newP :: Int -> Int -> Point
 newP x y = Poi x y
+
 difP :: Point -> Point -> Float  -- distancia absoluta
 difP (Poi ax ay) (Poi bx by) = result where
       result = sqrt (fromIntegral (dx * dx + dy * dy))
       dx = ax - bx
       dy = ay - by
-
-      
