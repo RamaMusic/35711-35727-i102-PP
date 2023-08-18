@@ -5,13 +5,13 @@ import City ( City, distanceC )
 import Quality ( Quality, capacityQ, delayQ )
 
 data Link = Lin City City Quality deriving (Eq, Show)
-
+-- ¿Crear una verificación para ver que las ciudades sean distintas?
 newL :: City -> City -> Quality -> Link -- genera un link entre dos ciudades distintas
 newL city1 city2 quality = Lin city1 city2 quality 
 
 connectsL :: City -> Link -> Bool   -- indica si esta ciudad es parte de este link
 connectsL city (Lin lCity1 lCity2 _) = city `elem` [lCity1, lCity2]
-
+-- ¿Verificar que la city 1 y city 2 sean distintas?
 linksL :: City -> City -> Link -> Bool -- indica si estas dos ciudades distintas estan conectadas mediante este link
 linksL city1 city2 link = city1 `connectsL` link && city2 `connectsL` link
 --linksL city1 city2 (Lin lCity1 lCity2 _) = (lCity1, lCity2) `elem` [(city1, city2), (city2, city1)]
