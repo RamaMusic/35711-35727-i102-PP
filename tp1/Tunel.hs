@@ -5,22 +5,20 @@ import Link ( Link, connectsL, delayL )
 import City ( City )
 import Data.List
 
-data Tunel = Tun [Link] deriving (Eq, Show)
+data Tunel = Tun [Link] deriving (Eq)
+
+instance Show Tunel where
+   show (Tun links) = "Tunel: " ++ show links
 
 newT :: [Link] -> Tunel
 newT links = tunel where
    tunel | null links = error "No has ingresado ningún link."
          | otherwise = Tun links
 
--- isInTunel :: City -> Tunel -> Bool
--- isInTunel c1 (Tun links) = not (null [link | link <- links, c1 `connectsL` link])
-
 connectsT :: City -> City -> Tunel -> Bool -- inidca si este tunel conceta estas dos ciudades distintas
 connectsT c1 c2 (Tun links) = c1 `connectsL` h && c2 `connectsL` l || c1 `connectsL` l && c2 `connectsL` h where
    h = head links
    l = last links
--- MEJORAR
--- Si la lista está ordenada, por qué carajo verifico que esté o en la cabecera o en el final?
 
 usesT :: Link -> Tunel -> Bool  -- indica si este tunel atraviesa ese link 
 usesT link (Tun links) = link `elem` links

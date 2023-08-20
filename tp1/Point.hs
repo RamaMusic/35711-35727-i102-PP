@@ -11,7 +11,10 @@
 module Point ( Point, newP, difP)
    where
 
-data Point = Poi Int Int deriving (Eq, Show)
+data Point = Poi Int Int deriving Eq
+
+instance Show Point where
+    show (Poi x y) = "Point: (" ++ show x ++ "," ++ show y ++ ")"
 
 newP :: Int -> Int -> Point
 newP x y = Poi x y
@@ -21,15 +24,3 @@ difP (Poi ax ay) (Poi bx by) = result where
       result = sqrt (fromIntegral (dx * dx + dy * dy))
       dx = ax - bx
       dy = ay - by
-
-{- Ejemplo: 
-p1 :: Point
-p1 = newP 1 1
-
-p2 :: Point
-p2 = newP 2 2
-
-diff :: Float
-diff = difP p1 p2
-Output: 1.4142135 or sqrt 2 
--}
