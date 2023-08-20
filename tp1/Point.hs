@@ -21,3 +21,15 @@ difP (Poi ax ay) (Poi bx by) = result where
       result = sqrt (fromIntegral (dx * dx + dy * dy))
       dx = ax - bx
       dy = ay - by
+
+{- Ejemplo: 
+p1 :: Point
+p1 = newP 1 1
+
+p2 :: Point
+p2 = newP 2 2
+
+diff :: Float
+diff = difP p1 p2
+Output: 1.4142135 or sqrt 2 
+-}

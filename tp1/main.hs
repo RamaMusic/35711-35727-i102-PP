@@ -11,7 +11,7 @@ p3 = newP 3 3
 p4 = newP 4 4
 p5 = newP 5 5
 
-bsas = newC "BsAs" p1
+bsas = newC "" p1
 capital = newC "Caba" p1
 chaco = newC "Chaco" p2
 cacho = newC "Chaco" p2
@@ -37,9 +37,9 @@ c = connectsT bsas chaco t1
 d = usesT l4 t1
 e = usesT l3 t1
 
-let r1 = newR
-r1 = foundR r1 bsas
-r1 = foundR r1 capital
+-- let r1 = newR
+-- r1 = foundR r1 bsas
+-- r1 = foundR r1 capital
 
 -- r1 = newR [bsas, chaco, sn, salta] [l1, l2, l3] [t1, t2]
 -- r2 = foundR r1 snn

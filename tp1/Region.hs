@@ -26,8 +26,6 @@ linkR (Reg cities links tun) c1 c2 quality = (Reg cities newLinks tun) where
 -- tunelR :: Region -> [ City ] -> Region -- genera una comunicación entre dos ciudades distintas de la región
 -- tunelR (Reg cities links tun) new_cities = (Reg cities links newTunels) where
 
-
-
 connectedR :: Region -> City -> City -> Bool -- indica si estas dos ciudades estan conectadas por un tunel
 connectedR (Reg _ _ tun) c1 c2 = or [connectsT c1 c2 tunel | tunel <- tun]
 
@@ -43,3 +41,5 @@ availableCapacityForR (Reg _ _ tun) c1 c2 = minimum [capacityL link | link <- li
    tunel = head [tunel | tunel <- tun, connectsT c1 c2 tunel]
    links = [link | link <- links, usesT link tunel]
 -- Hay que probarlo.
+
+-- Falta ver tambien los links dentro del túnel y qué capacidad disponible tienen entre ellos.
