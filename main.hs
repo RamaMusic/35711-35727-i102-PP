@@ -88,8 +88,15 @@ r5 = foundR r4 salta
 r6 = foundR r5 snn
 errorRegion = foundR r6 capital -- Output: *** Exception: Ya existe una ciudad en ese punto.
 
-r7 = linkR r3 bsas chaco low -- Output: Reg [Cit ...] [Lin (Cit "Buenos ...) (Cit "Chaco ...) (Qua "low" 2 10.0)] []
-r8 = linkR r7 chaco bsas medium -- Output: *** Exception: Ya existe un link entre esas ciudades.
+r7 = linkR r5 bsas chaco low -- Output: Reg [Cit ...] [Lin (Cit "Buenos ...) (Cit "Chaco ...) (Qua "low" 2 10.0)] []
+r8 = linkR r7 chaco sn medium
+r8' = linkR r7 chaco bsas medium -- Output: *** Exception: Ya existe un link entre esas ciudades.
+
+r9 = tunelR r8 [bsas, chaco, sn]
+r9' = tunelR r8 [bsas, chaco, sn, salta] -- Output: *** Exception: No existe un enlacee entre esas ciudades.
+
+r10 = tunelR (linkR (foundR r9' snn) salta snn high) [salta, snn]
+
 
 testR = []
 

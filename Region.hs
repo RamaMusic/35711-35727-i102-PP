@@ -1,4 +1,4 @@
-module Region ( Region, newR, foundR, linkR, connectedR, linkedR, delayR, availableCapacityForR )
+module Region ( Region, newR, foundR, tunelR, linkR, connectedR, linkedR, delayR, getLinkForR, pathR )
    where -- agregar tunelR,
 import Point
 import City
@@ -28,12 +28,27 @@ linkR (Reg cities links tun) c1 c2 quality   | isValid = Reg cities newLinks tun
                                              where isValid = not (or [linksL c1 c2 link | link <- links])
                                                    newLinks = links ++ [newL c1 c2 quality]
 
+getLinkForR :: Region -> City -> City -> Link
+getLinkForR (Reg _ links _) c1 c2   | isValid = head link_list
+                                    | otherwise = error "No existe un enlace entre esas ciudades."
+                                    where
+                                       link_list = [link | link <- links, linksL c1 c2 link]
+                                       isValid = length link_list == 1
+pathR :: Region -> [City] -> [Link]
+pathR _ [_] = []
+pathR region (city:cities) = [getLinkForR region city (head cities)] ++ pathR region cities
+-- Que pasa si getLinkForR levanta una excepción? 
+
 -- Supongo que la lista de City es una lista ya ordenada de las ciudades por donde pasan los links.
 
 -- Verificar que las ciudades que agreguemos en link y en tunelr esten dentro de la lista de region
 
--- tunelR :: Region -> [ City ] -> Region -- genera una comunicación entre dos ciudades distintas de la región
--- tunelR (Reg cities links tunnels) new_cities = (Reg cities links newTunels) where newtunnels = tunnels
+tunelR :: Region -> [ City ] -> Region -- genera una comunicación entre dos ciudades distintas de la región
+tunelR region@(Reg cities links tunnels) new_cities = (Reg cities links newTunnels) where
+   path = pathR region new_cities
+   newTunnels = tunnels ++ [newT (pathR region new_cities)]
+   
+   
    
 
 connectedR :: Region -> City -> City -> Bool -- indica si estas dos ciudades estan conectadas por un tunel
@@ -47,7 +62,11 @@ delayR region@(Reg _ _ tun) c1 c2   | isValid = delayT (head [tunel | tunel <- t
                                     | otherwise = error "No existe un tunel que conecte ambas ciudades."
                                     where isValid = connectedR region c1 c2
 
--- availableCapacityForR :: Region -> City -> City -> Int -- indica la capacidad disponible entre dos ciudades
--- availableCapacityForR region@(Reg cities links tunnels) = 2
+usedCapacityForR :: Region -> City -> City -> Int
+usedCapacityForR region@(Reg cities links tunnels) c1 c2 = length [tunel | tunel <- tunnels, usesT link tunel] where link = getLinkForR region c1 c2
+
+
+availableCapacityForR :: Region -> City -> City -> Int -- indica la capacidad disponible entre dos ciudades
+availableCapacityForR region@(Reg cities links tunnels) = 
 
 -- Falta ver tambien los links dentro del túnel y qué capacidad disponible tienen entre ellos.
