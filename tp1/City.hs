@@ -6,10 +6,12 @@ import Point ( Point, difP )
 data City = Cit String Point deriving Eq
 
 instance Show City where
+    show :: City -> String
     show (Cit name point) = "\n    City: " ++ name ++ " | " ++ show point
 
 newC :: String -> Point -> City
-newC name point = if null name then error "No has ingresado un nombre a la ciudad." else Cit name point
+newC name point | null name = error "No has ingresado un nombre a la ciudad."
+                | otherwise = Cit name point
 
 nameC :: City -> String
 nameC (Cit name _) = name

@@ -7,6 +7,7 @@ import Quality ( Quality, capacityQ, delayQ )
 data Link = Lin City City Quality deriving Eq
 
 instance Show Link where
+    show :: Link -> String
     show (Lin c1 c2 quality) = "\n    Link: \n    " ++ nameC c1 ++ " <-> " ++ nameC c2 ++ "\n    " ++ show quality
 
 newL :: City -> City -> Quality -> Link -- genera un link entre dos ciudades distintas

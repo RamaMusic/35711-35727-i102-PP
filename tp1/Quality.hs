@@ -4,6 +4,7 @@ module Quality ( Quality, newQ, capacityQ, delayQ )
 data Quality = Qua String Int Float deriving Eq
 
 instance Show Quality where
+    show :: Quality -> String
     show (Qua name capacity delay) = "Quality: " ++ name ++ " " ++ show capacity ++ " " ++ show delay
 
 -- ¿Crear una verificación para ver que el nombre no esté vacío, la capacidad sea mayor que 0 y el delay mayor que 0?
