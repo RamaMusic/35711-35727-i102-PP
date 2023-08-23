@@ -1,5 +1,5 @@
-module Region ( Region, newR, foundR, tunelR, linkR, connectedR, linkedR, delayR, getLinkForR, pathR )
-   where -- agregar tunelR,
+module Region ( Region, newR, foundR, linkR, tunelR, connectedR, linkedR, delayR )
+   where -- Agregar availableCapacityForR
 import Point
 import City
 import Quality
@@ -44,12 +44,9 @@ pathR region (city:cities) = [getLinkForR region city (head cities)] ++ pathR re
 -- Verificar que las ciudades que agreguemos en link y en tunelr esten dentro de la lista de region
 
 tunelR :: Region -> [ City ] -> Region -- genera una comunicación entre dos ciudades distintas de la región
-tunelR region@(Reg cities links tunnels) new_cities = (Reg cities links newTunnels) where
+tunelR region@(Reg cities links tunnels) new_cities = Reg cities links newTunnels where
    path = pathR region new_cities
    newTunnels = tunnels ++ [newT (pathR region new_cities)]
-   
-   
-   
 
 connectedR :: Region -> City -> City -> Bool -- indica si estas dos ciudades estan conectadas por un tunel
 connectedR (Reg _ _ tun) c1 c2 = or [connectsT c1 c2 tunel | tunel <- tun]
@@ -66,7 +63,7 @@ usedCapacityForR :: Region -> City -> City -> Int
 usedCapacityForR region@(Reg cities links tunnels) c1 c2 = length [tunel | tunel <- tunnels, usesT link tunel] where link = getLinkForR region c1 c2
 
 
-availableCapacityForR :: Region -> City -> City -> Int -- indica la capacidad disponible entre dos ciudades
-availableCapacityForR region@(Reg cities links tunnels) = 
+-- availableCapacityForR :: Region -> City -> City -> Int -- indica la capacidad disponible entre dos ciudades
+-- availableCapacityForR region@(Reg cities links tunnels) = 
 
 -- Falta ver tambien los links dentro del túnel y qué capacidad disponible tienen entre ellos.
