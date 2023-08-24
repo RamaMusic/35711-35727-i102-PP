@@ -5,9 +5,8 @@ data Quality = Qua String Int Float deriving Eq
 
 instance Show Quality where
     show :: Quality -> String
-    show (Qua name capacity delay) = "Quality: " ++ name ++ " " ++ show capacity ++ " " ++ show delay
+    show (Qua name capacity delay) = "Qua: " ++ name ++ " | Cap: " ++ show capacity ++ " | Del: " ++ show delay
 
--- ¿Crear una verificación para ver que el nombre no esté vacío, la capacidad sea mayor que 0 y el delay mayor que 0?
 checkQ ::String -> Int -> Float -> Bool
 checkQ name capacity delay = not (null name) && capacity > 0 && delay > 0
 

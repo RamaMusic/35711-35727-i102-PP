@@ -7,6 +7,7 @@ import City ( City )
 data Tunel = Tun [Link] deriving Eq
 
 instance Show Tunel where
+   show :: Tunel -> String
    show (Tun links) = "Tunel: " ++ show links
 
 newT :: [Link] -> Tunel

@@ -1,6 +1,0 @@
-Hay que hacer manejo de excepciones?
-
-¿Errores en español o en inglés?
-
-Podemos modificar la instance de show en cada archivo?
-Está definido en Data, junto a (Eq, Show)

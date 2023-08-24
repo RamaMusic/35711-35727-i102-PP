@@ -95,15 +95,22 @@ r8' = linkR r7 chaco bsas medium -- Output: *** Exception: Ya existe un link ent
 r9 = tunelR r8 [bsas, chaco, sn]
 r9' = tunelR r8 [bsas, chaco, sn, salta] -- Output: *** Exception: No existe un enlacee entre esas ciudades.
 
-r10 = tunelR (linkR (foundR r9' snn) salta snn high) [salta, snn]
+r10 = tunelR r9 [bsas, chaco]
 
+r10' = tunelR r10 [bsas, chaco, sn, salta]
 
-testR = []
+testR = [connectedR r10 bsas sn, not (connectedR r10 bsas salta),
+        not (linkedR r10 bsas sn),
+        linkedR r10 bsas chaco,
+        availableCapacityForR r10 bsas chaco == 0,
+        not (availableCapacityForR r10 chaco sn == 4) ,-- La capacidad "libre" es 3.
+        delayR r10 bsas chaco == distanceC bsas chaco * delayQ low
+        ]
 
 -- Global tests
 testAll = all and [testP, testC, testQ, testL, testT, testR]
 testAll' = map and [testP, testC, testQ, testL, testT, testR]
 
+-- mmodule Region ( Region, newR, foundR, linkR, tunelR, connectedR, linkedR, delayR, availableCapacityForR )
+
 -- Verifica que todos los tests sean verdaderos. Si al menos uno es falso, devuelve False.
-
-
