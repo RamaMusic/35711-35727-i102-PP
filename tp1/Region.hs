@@ -3,7 +3,7 @@ module Region ( Region, newR, foundR, linkR, tunelR, connectedR, linkedR, delayR
 
 import City ( distanceC, City )
 import Quality ( Quality )
-import Link ( linksL, newL, Link )
+import Link ( capacityL, linksL, newL, Link )
 import Tunel ( connectsT, delayT, newT, usesT, Tunel )
 
 data Region = Reg [City] [Link] [Tunel]
@@ -49,11 +49,17 @@ isRepeated :: [City] -> Bool
 isRepeated [] = False
 isRepeated (city:cities) = or [city == city2 | city2 <- cities]
 
+isAlreadyConnected :: Region -> [City] -> Bool
+isAlreadyConnected (Reg _ _ tunnels) cities = or [connectsT h l tunnel | tunnel <- tunnels] where
+   h = head cities
+   l = last cities
+
 tunelR :: Region -> [ City ] -> Region -- genera una comunicación entre dos ciudades distintas de la región
 tunelR region@(Reg cities links tunnels) new_cities
    | not (isInRegion region new_cities) = error "Alguna de las ciudades no pertenece a la región."
    | not (isRepeated new_cities) = error "La lista de ciudades contiene dos o más ciudades iguales."
    | length new_cities <= 1 = error "La lista de ciudades debe contener al menos dos ciudades."
+   | isAlreadyConnected region new_cities = error "Las ciudades ya están conectadas."
    | otherwise = Reg cities links newTunnels
    where newTunnels = tunnels ++ [newT (pathR region new_cities)]
 
@@ -69,12 +75,14 @@ delayR region@(Reg _ _ tun) c1 c2
    | otherwise = error "No existe un tunel que conecte ambas ciudades."
    where isValid = connectedR region c1 c2
 
-usedCapacityForR :: Region -> City -> City -> Int
-usedCapacityForR region@(Reg cities links tunnels) c1 c2 = length [tunel | tunel <- tunnels, usesT link tunel] 
-   where link = getLinkForR region c1 c2
+tunnelCounter :: Region -> Link -> Int
+tunnelCounter (Reg _ _ tunnels) link = length [tunel | tunel <- tunnels, link `usesT` tunel]
 
-
--- availableCapacityForR :: Region -> City -> City -> Int -- indica la capacidad disponible entre dos ciudades
--- availableCapacityForR region@(Reg cities links tunnels) = 
-
+availableCapacityForR :: Region -> City -> City -> Int -- indica la capacidad disponible entre dos ciudades
+availableCapacityForR region@(Reg _ links _) c1 c2 = capacityL target - (region `tunnelCounter` target) where
+   target = head [link | link <- links, linksL c1 c2 link]
+   -- target = head (filter (linksL c1 c2) links)
+   -- Así está mejor? Andar debería andar igual, creo.
+   -- Agregar caso de error cuando no existe un link entre las ciudades.
+   -- Agregar availableCapacityForR a tunnelR.
 -- Falta ver tambien los links dentro del túnel y qué capacidad disponible tienen entre ellos.
