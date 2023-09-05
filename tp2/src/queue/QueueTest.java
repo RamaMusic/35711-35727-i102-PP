@@ -76,7 +76,7 @@ public class QueueTest {
       queue.take();
       fail( "Expected Error was not thrown." );
     } catch (Error e) {
-      assertTrue( e.getMessage().equals( "Queue is empty" ) );
+      assertTrue( e.getMessage().equals(queue.emptyError) );
     }
   }
 
@@ -88,7 +88,7 @@ public class QueueTest {
       queue.take();
       fail( "Expected Error was not thrown." );
     } catch (Error e) {
-      assertTrue( e.getMessage().equals( "Queue is empty" ) );
+      assertTrue( e.getMessage().equals(queue.emptyError) );
     }
   }
 
@@ -98,7 +98,7 @@ public class QueueTest {
       queue.head();
       fail( "Expected Error was not thrown." );
     } catch (Error e) {
-      assertTrue( e.getMessage().equals( "Queue is empty" ) );
+      assertTrue( e.getMessage().equals(queue.emptyError) );
     }
   }
 }
