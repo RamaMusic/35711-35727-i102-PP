@@ -1,39 +1,35 @@
 package queue;
+import queue.container.Container;
+import queue.container.FilledContainer;
+import queue.container.EmptyContainer;
 
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class Queue {
-	private List<String> data = new ArrayList<>();
-	public String emptyError = "Queue is empty empty";
 
-  public boolean isEmpty() {
-		return data.isEmpty();
-	}
+	private ArrayList<Container> data = new ArrayList<>();
+
+	public Queue() { data.add(new EmptyContainer()); }
+
+  	public boolean isEmpty() { return (data.size() == 1); }
 
 	public Queue add( Object  cargo ) {
-		data.add(0, cargo.toString());
+		data.add(1, new FilledContainer(cargo));
 		return this;
 	}
 
 	public Object take() {
-		if (!this.isEmpty()) {
-			return data.remove(data.size() - 1);
-		}
-
-		throw new Error(this.emptyError);
+		Object cargo = this.head();
+		data.remove(getLastIndex());
+		return cargo;
 	}
 
-	public Object head() {
-	  	if (!this.isEmpty()) {
-			return data.get(data.size() - 1);
-		}
+	public Object head() { return data.get(getLastIndex()).getCargo(); }
 
-		throw new Error(this.emptyError);
+	private int getLastIndex() {
+		return data.size() - 1;
 	}
 
-	public int size() {
-		// TODO Auto-generated method stub
-		return data.size();
-	}
+	public int size() { return (data.size() - 1); }
 }
