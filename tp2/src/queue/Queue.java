@@ -4,79 +4,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Queue {
-	static Queue defaultQueue = new EmptyQueue();
-	ArrayList<Object> data = new ArrayList<>();
-	public String emptyError = "Queue is empty";
+	private List<String> data = new ArrayList<>();
+	public String emptyError = "Queue is empty empty";
 
-  	public boolean isEmpty() {
+  public boolean isEmpty() {
 		return data.isEmpty();
 	}
 
 	public Queue add( Object  cargo ) {
-		defaultQueue = defaultQueue.add(cargo);
-		return defaultQueue;
-	}
-
-	public Object take() {
-		  return defaultQueue.take();
-	}
-
-	public Object head() {
-		return defaultQueue.head();
-  	}
-
-	public int size() {
-		return defaultQueue.size();
-	}
-}
-
-class EmptyQueue extends Queue {
-	@Override
-	public Queue add (Object cargo) {
-		return new FilledQueue().add(cargo);
-	}
-
-
-	public Object take() {
-		failEmpty();
-		return null;
-	}
-
-	@Override
-	public Object head() {
-		failEmpty();
-		return null;
-	}
-
-	private void failEmpty() {
-		throw new Error(this.emptyError);
-	}
-
-	@Override
-	public int size() {
-		return 0;
-	}
-}
-
-class FilledQueue extends Queue {
-
-	@Override
-	public Queue add (Object cargo) {
-		data.add(0, cargo);
+		data.add(0, cargo.toString());
 		return this;
 	}
 
 	public Object take() {
-		return data.remove(data.size() - 1);
+		if (!this.isEmpty()) {
+			return data.remove(data.size() - 1);
+		}
+
+		throw new Error(this.emptyError);
 	}
 
-	@Override
 	public Object head() {
-		return data.get(data.size() - 1);
+	  	if (!this.isEmpty()) {
+			return data.get(data.size() - 1);
+		}
+
+		throw new Error(this.emptyError);
 	}
 
-	@Override
 	public int size() {
+		// TODO Auto-generated method stub
 		return data.size();
 	}
 }
