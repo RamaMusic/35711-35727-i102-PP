@@ -1,10 +1,5 @@
 package queue;
-import queue.container.Container;
-import queue.container.FilledContainer;
-import queue.container.EmptyContainer;
-
 import java.util.ArrayList;
-
 
 public class Queue {
 
@@ -19,17 +14,11 @@ public class Queue {
 		return this;
 	}
 
-	public Object take() {
-		Object cargo = this.head();
-		data.remove(getLastIndex());
-		return cargo;
-	}
+	public Object take() { return data.remove(getLastIndex()).getCargo(); }
 
 	public Object head() { return data.get(getLastIndex()).getCargo(); }
 
-	private int getLastIndex() {
-		return data.size() - 1;
-	}
+	public int size() { return data.size() - 1; }
 
-	public int size() { return (data.size() - 1); }
+	private int getLastIndex() { return size(); }
 }

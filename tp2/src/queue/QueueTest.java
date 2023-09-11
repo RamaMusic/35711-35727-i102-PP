@@ -1,6 +1,5 @@
 package queue;
 
-import queue.container.Container;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -77,7 +76,7 @@ public class QueueTest {
       queue.take();
       fail( "Expected Error was not thrown." );
     } catch (Error e) {
-      assertTrue( e.getMessage().equals(Container.emptyError) );
+      assertTrue( e.getMessage().equals(EmptyContainer.emptyError) );
     }
   }
 
@@ -89,7 +88,7 @@ public class QueueTest {
       queue.take();
       fail( "Expected Error was not thrown." );
     } catch (Error e) {
-      assertTrue( e.getMessage().equals(Container.emptyError) );
+      assertTrue( e.getMessage().equals(EmptyContainer.emptyError) );
     }
   }
 
@@ -99,7 +98,7 @@ public class QueueTest {
       queue.head();
       fail( "Expected Error was not thrown." );
     } catch (Error e) {
-      assertTrue( e.getMessage().equals(Container.emptyError) );
+      assertTrue( e.getMessage().equals(EmptyContainer.emptyError) );
     }
   }
 }
