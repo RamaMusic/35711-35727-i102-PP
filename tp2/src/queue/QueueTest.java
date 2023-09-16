@@ -7,80 +7,79 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class QueueTest {
 
-  @Test public void test01QueueShouldBeEmptyWhenCreated() {
-    assertTrue( new Queue().isEmpty() );
-  }
+  private String FIRST_ELEMENT = "First";
+  private String SECOND_ELEMENT = "Second";
+  private String SINGLE_ELEMENT = "Something";
 
-  @Test public void test02AddElementsToTheQueue() {
-    assertFalse( createOneElementQueue().isEmpty() );
-  }
+  @Test
+  public void test01QueueShouldBeEmptyWhenCreated() { assertTrue(new Queue().isEmpty()); }
 
-  @Test public void test03AddedElementsIsAtHead() {
-    assertEquals( "Something", createOneElementQueue().head() );
-  }
+  @Test
+  public void test02AddElementsToTheQueue() { assertFalse(createOneElementQueue().isEmpty()); }
 
-  @Test public void test04TakeRemovesElementsFromTheQueue() {
+  @Test
+  public void test03AddedElementsIsAtHead() { assertEquals(SINGLE_ELEMENT, createOneElementQueue().head()); }
+
+  @Test
+  public void test04TakeRemovesElementsFromTheQueue() {
     Queue queue = createOneElementQueue();
     queue.take();
 
-    assertTrue( queue.isEmpty() );
+    assertTrue(queue.isEmpty());
   }
 
-  @Test public void test05TakeReturnsLastAddedObject() {
-    Queue queue = new Queue();
-    String addedObject = "Something";
-    queue.add( addedObject );
-    
-    assertEquals( addedObject, queue.take() );
-  }
-
-  @Test public void test06QueueBehavesFIFO() {
-    Queue queue = new Queue();
-    String firstAddedObject = "First";
-    String secondAddedObject = "Second";
-
-    queue.add( firstAddedObject );
-    queue.add( secondAddedObject );
-
-    assertEquals( queue.take(), firstAddedObject );
-    assertEquals( queue.take(), secondAddedObject );
-    assertTrue( queue.isEmpty() );
-  }
-
-  @Test public void test07HeadReturnsFirstAddedObject() {
-    Queue queue = new Queue();
-    String firstAddedObject = "First";
-
-    queue.add( firstAddedObject );
-    queue.add( "Second" );
-
-    assertEquals( queue.head(), firstAddedObject );
-  }
-
-  @Test public void test08HeadDoesNotRemoveObjectFromQueue() {
+  @Test
+  public void test05TakeReturnsLastAddedObject() {
     Queue queue = createOneElementQueue();
-    assertEquals( 1, queue.size() );
+
+    assertEquals(SINGLE_ELEMENT, queue.take());
+  }
+
+  @Test
+  public void test06QueueBehavesFIFO() {
+  Queue queue = createTwoElementQueue();
+
+    assertEquals(queue.take(), FIRST_ELEMENT);
+    assertEquals(queue.take(), SECOND_ELEMENT);
+    assertTrue(queue.isEmpty());
+  }
+
+  @Test
+  public void test07HeadReturnsFirstAddedObject() {
+    Queue queue = createTwoElementQueue();
+
+    assertEquals(queue.head(), FIRST_ELEMENT);
+  }
+
+  @Test
+  public void test08HeadDoesNotRemoveObjectFromQueue() {
+    Queue queue = createOneElementQueue();
+    assertEquals(1, queue.size());
     queue.head();
-    assertEquals( 1, queue.size() );
+    assertEquals(1, queue.size());
   }
 
-  @Test public void test09SizeRepresentsObjectInTheQueue() {
-    assertEquals( 2, new Queue().add( "First" ).add( "Second" ).size() );
+  @Test
+  public void test09SizeRepresentsObjectInTheQueue() {
+    assertEquals(2, createTwoElementQueue().size());
   }
-  
-  @Test public void test10CanNotTakeWhenThereAreNoObjectsInTheQueue() {
+
+  @Test
+  public void test10CanNotTakeWhenThereAreNoObjectsInTheQueue() {
     Queue queue = new Queue();
     assertTrue(throwsEmptyError(queue::take));
   }
 
-  @Test public void test09CanNotTakeWhenThereAreNoObjectsInTheQueueAndTheQueueHadObjects() {
+  @Test
+  public void test09CanNotTakeWhenThereAreNoObjectsInTheQueueAndTheQueueHadObjects() {
     Queue queue = createOneElementQueue();
     queue.take();
 
     assertTrue(throwsEmptyError(queue::take));
   }
 
-  @Test public void test10CanNotHeadWhenThereAreNoObjectsInTheQueue() {
+  @Test
+  public void test10CanNotHeadWhenThereAreNoObjectsInTheQueue() {
     Queue queue = new Queue();
     assertTrue(throwsEmptyError(queue::head));
   }
@@ -91,6 +90,10 @@ public class QueueTest {
   }
 
   private Queue createOneElementQueue() {
-    return new Queue().add( "Something" );
+    return new Queue().add(SINGLE_ELEMENT);
+  }
+
+  private Queue createTwoElementQueue() {
+    return new Queue().add(FIRST_ELEMENT).add(SECOND_ELEMENT);
   }
 }
