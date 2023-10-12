@@ -11,7 +11,7 @@ public class WestDirection extends Direction{
 
     @Override
     public Direction turnRight() {
-        return new EastDirection();
+        return new NorthDirection();
     }
 
     @Override
@@ -21,6 +21,6 @@ public class WestDirection extends Direction{
 
     @Override
     public ArrayList<Integer> getVector() {
-        return new ArrayList<>(Arrays.asList(0, 1));
+        return new ArrayList<>(Arrays.asList(-1, 0));
     }
 }

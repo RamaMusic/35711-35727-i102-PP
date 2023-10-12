@@ -21,6 +21,6 @@ public class EastDirection extends Direction{
 
     @Override
     public ArrayList<Integer> getVector() {
-        return new ArrayList<>(Arrays.asList(0, -1));
+        return new ArrayList<>(Arrays.asList(1, 0));
     }
 }

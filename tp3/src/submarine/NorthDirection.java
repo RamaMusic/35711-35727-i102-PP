@@ -19,6 +19,6 @@ public class NorthDirection extends Direction {
 
     @Override
     public ArrayList<Integer> getVector() {
-        return new ArrayList<>(Arrays.asList(1, 0));
+        return new ArrayList<>(Arrays.asList(0, 1));
     }
 }
