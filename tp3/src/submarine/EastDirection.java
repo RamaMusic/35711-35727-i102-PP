@@ -1,6 +1,7 @@
 package submarine;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class EastDirection extends Direction{
     @Override
@@ -20,6 +21,6 @@ public class EastDirection extends Direction{
 
     @Override
     public ArrayList<Integer> getVector() {
-        return null;
+        return new ArrayList<>(Arrays.asList(0, -1));
     }
 }
