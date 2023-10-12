@@ -2,39 +2,20 @@ package submarine;
 
 import java.util.ArrayList;
 
-public abstract class Nemo {
+public class Nemo {
+    private Submarine submarine;
 
-    public abstract void command(String instructions);
-    
-    public abstract boolean isAlive();
-    
-    public abstract Direction getDirection();
-    
-    public abstract ArrayList<Integer> getPosition();
-    
-    public abstract int getDepth();    
-}
-
-class NemoAlive extends Nemo {
-    private int depth = 0;
-
-    private Direction direction;
-
-    private ArrayList<Integer> position = new ArrayList<Integer>();
-
-    private boolean isAlive = true; // false == explotó
-
-    public NemoAlive(int x, int y, Direction direction) {
-        this.position.add(x);
-        this.position.add(y);
-        this.direction = direction;
+    public Nemo(int x, int y, Direction direction) {
+        submarine = new SubmarineAlive(x, y, direction);
     }
 
-    public Direction getDirection() { return direction; }
+    public boolean isAlive() { return submarine.isAlive(); }
 
-    public ArrayList<Integer> getPosition() { return position; }
+    public Direction getDirection() { return submarine.getDirection(); }
 
-    public int getDepth() { return depth; }
+    public ArrayList<Integer> getPosition() { return submarine.getPosition(); }
+
+    public int getDepth() { return submarine.getDepth(); }
 
     public void command(String instructions) {
         instructions.chars().forEach(ch -> executeCommand(String.valueOf((char) ch)));
@@ -42,19 +23,19 @@ class NemoAlive extends Nemo {
     private void executeCommand(String instruction) {
         switch (instruction) {
             case "d":
-                this.depth--;
+                submarine.descendOne();
                 break;
             case "u":
-                this.depth++;
+                submarine.ascendOne();
                 break;
             case "r":
-                direction = direction.turnRight();
+                submarine.turnRight();
                 break;
             case "l":
-                direction = direction.turnLeft();
+                submarine.turnLeft();
                 break;
             case "f":
-                move();
+                submarine.move();
                 break;
             case "m":
                 throwCapsule();
@@ -64,30 +45,9 @@ class NemoAlive extends Nemo {
         }
     }
 
-    public boolean isAlive() { return this.isAlive; }
-
-    private void move() {
-        position.set(0, position.get(0) + direction.getVector().get(0));
-        position.set(1, position.get(1) + direction.getVector().get(1));
-    }
-
     private void throwCapsule() {
-        if (this.depth < -1) this.isAlive = false;
+        if (submarine.getDepth() < -1)  {
+            submarine = new SubmarineDead();
+        }
     }
 }
-
-class NemoDead extends Nemo {
-
-    public static RuntimeException ESTA_MUERTO_EXCEPTION = new RuntimeException("El submaino está muerto.");
-
-    public void command(String instructions) { throw ESTA_MUERTO_EXCEPTION; };
-
-    public boolean isAlive() { throw ESTA_MUERTO_EXCEPTION; };
-
-    public Direction getDirection() { throw ESTA_MUERTO_EXCEPTION;}
-
-    public ArrayList<Integer> getPosition() { throw ESTA_MUERTO_EXCEPTION; }
-
-    public int getDepth() { throw ESTA_MUERTO_EXCEPTION; }
-
-}    
