@@ -45,7 +45,7 @@ public class Nemo {
         }
     }
 
-    private void throwCapsule() {
+    public void throwCapsule() {
         if (submarine.getDepth() < -1)  {
             submarine = new SubmarineDead();
         }
