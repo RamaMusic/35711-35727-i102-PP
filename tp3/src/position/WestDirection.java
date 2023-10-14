@@ -1,4 +1,4 @@
-package submarine;
+package position;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,6 +17,11 @@ public class WestDirection extends Direction{
     @Override
     public String getDirection() {
         return "w";
+    }
+
+    @Override
+    public Point move(Point position) {
+        return new Point(position.getX() - 1, position.getY(), position.getZ());
     }
 
     @Override

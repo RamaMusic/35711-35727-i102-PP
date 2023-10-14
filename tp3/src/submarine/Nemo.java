@@ -1,53 +1,44 @@
 package submarine;
 
-import java.util.ArrayList;
+import position.Direction;
+import position.Point;
+
+import java.util.HashMap;
 
 public class Nemo {
-    private Submarine submarine;
+    public Direction direction;
+    public Point position;
+    private HashMap <Character, Runnable> commands = new HashMap<>();
 
-    public Nemo(int x, int y, Direction direction) {
-        submarine = new SubmarineAlive(x, y, direction);
+    private Boolean isAlive = true;
+
+    public Nemo(Point position, Direction direction){
+        this.position = position;
+        this.direction = direction;
+        createCommands();
     }
-
-    public boolean isAlive() { return submarine.isAlive(); }
-
-    public Direction getDirection() { return submarine.getDirection(); }
-
-    public ArrayList<Integer> getPosition() { return submarine.getPosition(); }
-
-    public int getDepth() { return submarine.getDepth(); }
 
     public void command(String instructions) {
         instructions.chars().forEach(ch -> executeCommand(String.valueOf((char) ch)));
     }
-    private void executeCommand(String instruction) {
-        switch (instruction) {
-            case "d":
-                submarine.descendOne();
-                break;
-            case "u":
-                submarine.ascendOne();
-                break;
-            case "r":
-                submarine.turnRight();
-                break;
-            case "l":
-                submarine.turnLeft();
-                break;
-            case "f":
-                submarine.move();
-                break;
-            case "m":
-                throwCapsule();
-                break;
-            default:
-                break;
-        }
-    }
 
-    public void throwCapsule() {
-        if (submarine.getDepth() < -1)  {
-            submarine = new SubmarineDead();
-        }
+    public String getPosition() { return position.toString(); }
+
+    public Direction getDirection() { return direction; }
+
+    public int getDepth() { return position.getZ(); }
+
+    public boolean isAlive() { return isAlive; }
+
+    private void executeCommand(String instruction) {
+        commands.get(instruction.charAt(0)).run();
+    }
+    private void createCommands() {
+        commands.put('d', () -> position = position.descend());
+        commands.put('u', () -> position = position.ascend());
+        commands.put('l', () -> direction = direction.turnLeft());
+        commands.put('r', () -> direction = direction.turnRight());
+        commands.put('f', ()-> position = direction.move(position));
+//        commands.put('m', () -> throwCapsule());
     }
 }
