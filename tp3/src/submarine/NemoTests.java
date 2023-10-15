@@ -3,8 +3,7 @@ package submarine;
 import org.junit.jupiter.api.Test;
 import position.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class NemoTests {
@@ -104,10 +103,17 @@ public class NemoTests {
         assertTrue(submarine.isDead());
     }
 
-    @Test void test14SubmarineDiesAfterCommandDFLLFFDDAAAFFDD() {
-        Nemo submarine = new Nemo(new Point(0, 0, 0), north());
-        submarine.command("dfllffddaaaffdd");
+    @Test void test14SubmarineDiesAfterCommandDFLLFFDDAAAFFDDM() {
+        Nemo submarine = new Nemo(zeroPoint(), north());
+        submarine.command("dfllffdduuuffddm");
         assertTrue(submarine.isDead());
+    }
+
+    @Test void test15SubmarineThrowsExceptionAfterRunningACommandWhenSubmarineIsDead() {
+        Nemo submarine = new Nemo(new Point(0, 0, -2), north());
+        submarine.command("m");
+        assertTrue(submarine.isDead());
+//        assertThrows(RuntimeException.class, () -> submarine.command("f"));
     }
 
 

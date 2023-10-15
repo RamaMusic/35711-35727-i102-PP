@@ -16,22 +16,15 @@ public abstract class Submarine {
     }
 
     public abstract String getPosition();
-
-    public abstract Point getPoint();
-
     public abstract Direction getDirection();
-
     public abstract int getDepth();
-
     public abstract boolean isDead();
-
     public abstract Submarine throwCapsule();
-
-    public void turnLeft() { direction = direction.turnLeft(); }
-    public void turnRight() { direction = direction.turnRight(); }
-    public void moveForward() { position = direction.move(position); }
-    public void ascend() { position = position.ascend(); }
-    public void descend() { position = position.descend(); }
+    public abstract void turnLeft();
+    public abstract void turnRight();
+    public abstract void moveForward();
+    public abstract void ascend();
+    public abstract void descend();
 }
 
 class SubmarineAlive extends Submarine {
@@ -41,9 +34,6 @@ class SubmarineAlive extends Submarine {
 
     @Override
     public String getPosition() { return position.toString(); }
-
-    @Override
-    public Point getPoint() { return position; }
 
     @Override
     public Direction getDirection() { return direction; }
@@ -59,6 +49,17 @@ class SubmarineAlive extends Submarine {
         if (position.getZ() < -1) return new SubmarineDead(position, direction);
         return this;
     }
+
+    @Override
+    public void turnLeft() { direction = direction.turnLeft(); }
+    @Override
+    public void turnRight() { direction = direction.turnRight(); }
+    @Override
+    public void moveForward() { position = direction.move(position); }
+    @Override
+    public void ascend() { position = position.ascend(); }
+    @Override
+    public void descend() { position = position.descend(); }
 }
 
 class SubmarineDead extends Submarine {
@@ -73,9 +74,6 @@ class SubmarineDead extends Submarine {
     public String getPosition() { throw SUBMARINE_HAS_EXPLODED; } // TODO Preguntar a emilio si la posición se devuelve incluso cuando explotó.
 
     @Override
-    public Point getPoint() { throw SUBMARINE_HAS_EXPLODED; } // Idem arriba.
-
-    @Override
     public Direction getDirection() { throw SUBMARINE_HAS_EXPLODED; }
 
     @Override
@@ -86,4 +84,15 @@ class SubmarineDead extends Submarine {
 
     @Override
     public boolean isDead() { return true; }
+
+    @Override
+    public void turnLeft() { throw SUBMARINE_HAS_EXPLODED; }
+    @Override
+    public void turnRight() { throw SUBMARINE_HAS_EXPLODED; }
+    @Override
+    public void moveForward() { throw SUBMARINE_HAS_EXPLODED; }
+    @Override
+    public void ascend() { throw SUBMARINE_HAS_EXPLODED; }
+    @Override
+    public void descend() { throw SUBMARINE_HAS_EXPLODED; }
 }
