@@ -8,13 +8,14 @@ public abstract class Direction {
 
     public abstract Direction turnRight();
 
-    public abstract String getDirection();
-
-    public abstract Point move(Point position);
+    public abstract String getDirectionStr();
 
     public abstract ArrayList<Integer> getVector();
 
     public boolean equals(Object other) {
         return other.getClass() == this.getClass();
     }
+
+    public Point move(Point position) { return position.add(getVector()); }
+
 }

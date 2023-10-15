@@ -15,7 +15,7 @@ public class SouthDirection extends Direction{
     }
 
     @Override
-    public String getDirection() {
+    public String getDirectionStr() {
         return "s";
     }
 

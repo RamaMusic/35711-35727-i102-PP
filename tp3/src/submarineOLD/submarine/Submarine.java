@@ -27,7 +27,7 @@ class SubmarineAlive extends Submarine {
 
     private Direction direction;
 
-    private ArrayList<Integer> position = new ArrayList<Integer>();
+    private ArrayList<Integer> position = new ArrayList<>();
 
     private boolean isAlive = true; // false == explotó
 

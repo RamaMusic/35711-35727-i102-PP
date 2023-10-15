@@ -1,5 +1,7 @@
 package position;
 
+import java.util.ArrayList;
+
 public class Point {
     private int x;
     private int y;
@@ -19,7 +21,7 @@ public class Point {
     public Point descend () { return new Point(x, y, z - 1); }
 
     public String toString() {
-        return "(" + x + "," + y + "," + z + ")";
+        return "(" + x + "," + y + ")";
     }
 
     public boolean equals(Object other) {
@@ -28,5 +30,9 @@ public class Point {
         return otherPoint.getX() == this.getX() &&
                 otherPoint.getY() == this.getY() &&
                 otherPoint.getZ() == this.getZ();
+    }
+
+    public Point add(ArrayList<Integer> vector) {
+        return new Point(x + vector.get(0), y + vector.get(1), z);
     }
 }

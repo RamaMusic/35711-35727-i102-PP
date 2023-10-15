@@ -15,17 +15,10 @@ public class EastDirection extends Direction{
     }
 
     @Override
-    public String getDirection() {
+    public String getDirectionStr() {
         return "e";
     }
 
     @Override
-    public Point move(Point position) {
-        return new Point(position.getX() + 1, position.getY(), position.getZ());
-    }
-
-    @Override
-    public ArrayList<Integer> getVector() {
-        return new ArrayList<>(Arrays.asList(1, 0));
-    }
+    public ArrayList<Integer> getVector() { return new ArrayList<>(Arrays.asList(1, 0)); }
 }

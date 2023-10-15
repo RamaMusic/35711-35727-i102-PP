@@ -15,12 +15,7 @@ public class NorthDirection extends Direction {
     }
 
     @Override
-    public String getDirection() { return "n"; }
-
-    @Override
-    public Point move(Point position) {
-        return new Point(position.getX(), position.getY() + 1, position.getZ());
-    }
+    public String getDirectionStr() { return "n"; }
 
     @Override
     public ArrayList<Integer> getVector() {

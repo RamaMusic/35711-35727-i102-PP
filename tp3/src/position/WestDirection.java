@@ -15,7 +15,7 @@ public class WestDirection extends Direction{
     }
 
     @Override
-    public String getDirection() {
+    public String getDirectionStr() {
         return "w";
     }
 
