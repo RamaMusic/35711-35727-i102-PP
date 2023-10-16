@@ -1,77 +1,96 @@
 package submarineOLD.submarine;
 
-import java.util.ArrayList;
+import submarineOLD.position.Direction;
+import submarineOLD.position.Point;
 
 public abstract class Submarine {
-    
-    public abstract boolean isAlive();
-    
-    public abstract Direction getDirection();
-    
-    public abstract ArrayList<Integer> getPosition();
-    
-    public abstract int getDepth();
 
-    public abstract void turnLeft();
+    protected Direction direction;
+    protected Point position;
 
-    public abstract void turnRight();
-
-    public abstract void descendOne();
-
-    public abstract void ascendOne();
-    public abstract void move();
-}
-
-class SubmarineAlive extends Submarine {
-    private int depth = 0;
-
-    private Direction direction;
-
-    private ArrayList<Integer> position = new ArrayList<>();
-
-    private boolean isAlive = true; // false == explotó
-
-    public SubmarineAlive(int x, int y, Direction direction) {
-        this.position.add(x);
-        this.position.add(y);
+    public Submarine(Point position, Direction direction) {
+        this.position = position;
         this.direction = direction;
     }
 
-    public Direction getDirection() { return direction; }
+    public abstract String getPosition();
+    public abstract Direction getDirection();
+    public abstract int getDepth();
+    public abstract boolean isDead();
+    public abstract Submarine throwCapsule();
+    public abstract void turnLeft();
+    public abstract void turnRight();
+    public abstract void moveForward();
+    public abstract void ascend();
+    public abstract void descend();
+}
 
-    public ArrayList<Integer> getPosition() { return position; }
-
-    public int getDepth() { return depth; }
-
-    public boolean isAlive() { return this.isAlive; }
-
-    public void move() {
-        position.set(0, position.get(0) + direction.getVector().get(0));
-        position.set(1, position.get(1) + direction.getVector().get(1));
+class SubmarineAlive extends Submarine {
+    public SubmarineAlive(Point position, Direction direction) {
+        super(position, direction);
     }
 
+    @Override
+    public String getPosition() { return position.toString(); }
+
+    @Override
+    public Direction getDirection() { return direction; }
+
+    @Override
+    public int getDepth() { return position.getZ(); }
+
+    @Override
+    public boolean isDead() { return false; }
+
+    @Override
+    public Submarine throwCapsule() {
+        if (position.getZ() < -1) return new SubmarineDead(position, direction);
+        return this;
+    }
+
+    @Override
     public void turnLeft() { direction = direction.turnLeft(); }
+    @Override
     public void turnRight() { direction = direction.turnRight(); }
-    public void descendOne() { depth--; }
-    public void ascendOne() { depth++; }
+    @Override
+    public void moveForward() { position = direction.move(position); }
+    @Override
+    public void ascend() { position = position.ascend(); }
+    @Override
+    public void descend() { position = position.descend(); }
 }
 
 class SubmarineDead extends Submarine {
 
-    public static RuntimeException ESTA_MUERTO_EXCEPTION = new RuntimeException("El submaino está muerto.");
+    public SubmarineDead(Point position, Direction direction) {
+        super(position, direction);
+    }
 
-    public void command(String instructions) { throw ESTA_MUERTO_EXCEPTION; };
+    public static RuntimeException SUBMARINE_HAS_EXPLODED = new RuntimeException("El submarino ha explotado.");
 
-    public boolean isAlive() { throw ESTA_MUERTO_EXCEPTION; };
+    @Override
+    public String getPosition() { throw SUBMARINE_HAS_EXPLODED; } // TODO Preguntar a emilio si la posición se devuelve incluso cuando explotó.
 
-    public Direction getDirection() { throw ESTA_MUERTO_EXCEPTION;}
+    @Override
+    public Direction getDirection() { throw SUBMARINE_HAS_EXPLODED; }
 
-    public ArrayList<Integer> getPosition() { throw ESTA_MUERTO_EXCEPTION; }
+    @Override
+    public int getDepth() { throw SUBMARINE_HAS_EXPLODED; }
 
-    public int getDepth() { throw ESTA_MUERTO_EXCEPTION; }
-    public void turnLeft() { throw ESTA_MUERTO_EXCEPTION; }
-    public void turnRight() { throw ESTA_MUERTO_EXCEPTION;}
-    public void descendOne() { throw ESTA_MUERTO_EXCEPTION; }
-    public void ascendOne(){ throw ESTA_MUERTO_EXCEPTION; }
-    public void move() { throw ESTA_MUERTO_EXCEPTION; }
-}    
+    @Override
+    public Submarine throwCapsule() { throw SUBMARINE_HAS_EXPLODED; }
+
+    @Override
+    public boolean isDead() { return true; }
+
+    @Override
+    public void turnLeft() { throw SUBMARINE_HAS_EXPLODED; }
+    @Override
+    public void turnRight() { throw SUBMARINE_HAS_EXPLODED; }
+    @Override
+    public void moveForward() { throw SUBMARINE_HAS_EXPLODED; }
+    @Override
+    public void ascend() { throw SUBMARINE_HAS_EXPLODED; }
+    @Override
+    public void descend() { throw SUBMARINE_HAS_EXPLODED; }
+}

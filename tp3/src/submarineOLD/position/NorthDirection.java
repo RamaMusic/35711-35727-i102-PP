@@ -1,4 +1,4 @@
-package submarineOLD.submarine;
+package submarineOLD.position;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +15,7 @@ public class NorthDirection extends Direction {
     }
 
     @Override
-    public String getDirection() { return "n"; }
+    public String getDirectionStr() { return "n"; }
 
     @Override
     public ArrayList<Integer> getVector() {

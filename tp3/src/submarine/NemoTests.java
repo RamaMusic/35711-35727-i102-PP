@@ -1,6 +1,7 @@
 package submarine;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import position.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,7 +11,7 @@ public class NemoTests {
 
     @Test
     public void test01StartsInCorrectInitialPositionDepthAndDirection() {
-        Nemo submarine = new Nemo(new Point(2,6,0), new SouthDirection());
+        Nemo submarine = new Nemo(new Point(2,6), new SouthDirection());
         assertEquals("(2,6)", submarine.getPosition());
         assertEquals(0, submarine.getDepth());
         assertEquals(new SouthDirection(), submarine.getDirection());
@@ -33,17 +34,23 @@ public class NemoTests {
     }
 
     @Test
-    public void test04AscendsOneUnitWithCommandU(){
+    public void test03bDescendsTwoUnitsWithCommandDD(){
         Nemo submarine = new Nemo(zeroPoint(), north());
-        submarine.command("u");
-        assertEquals(1, submarine.getDepth());
+        submarine.command("dd");
+        assertEquals(-2, submarine.getDepth());
     }
 
     @Test
-    public void test05AscendsTwoUnitsWithCommandUU() {
+    public void test04AscendsOneUnitWithCommandU(){
         Nemo submarine = new Nemo(zeroPoint(), north());
-        submarine.command("uu");
-        assertEquals(2, submarine.getDepth());
+        submarine.command("ddu");
+        assertEquals(-1, submarine.getDepth());
+    }
+
+    @Test
+    public void test05CanNotAscendAboveTheSurface() {
+        Nemo submarine = new Nemo(zeroPoint(), north());
+        assertTrue(assertThrowsErrorAndMessage("You can not go up from the surface level.", () -> submarine.command("u") ) );
     }
 
     @Test
@@ -98,25 +105,27 @@ public class NemoTests {
     }
 
     @Test void test13SubmarineDiesWhenThrowingCapsuleBelowDepthMinusOne() {
-        Nemo submarine = new Nemo(new Point(0, 0, -2), north());
-        submarine.command("m");
-        assertTrue(submarine.isDead());
+        Nemo submarine = new Nemo(new Point(0, 0), north());
+        assertTrue(assertThrowsErrorAndMessage("The submarine has exploded!", () -> submarine.command("ddm") ) );
     }
 
     @Test void test14SubmarineDiesAfterCommandDFLLFFDDAAAFFDDM() {
         Nemo submarine = new Nemo(zeroPoint(), north());
-        submarine.command("dfllffdduuuffddm");
-        assertTrue(submarine.isDead());
+        assertTrue(assertThrowsErrorAndMessage("The submarine has exploded!", () -> submarine.command("dfllffdduuuffddm") ) );
     }
 
-    @Test void test15SubmarineThrowsExceptionAfterRunningACommandWhenSubmarineIsDead() {
-        Nemo submarine = new Nemo(new Point(0, 0, -2), north());
-        submarine.command("m");
-        assertTrue(submarine.isDead());
-//        assertThrows(RuntimeException.class, () -> submarine.command("f"));
-    }
+//    @Test void test15SubmarineThrowsExceptionAfterRunningACommandWhenSubmarineIsDead() {
+//        Nemo submarine = new Nemo(new Point(0, 0), north());
+//        submarine.command("ddm");
+////        assertThrows(RuntimeException.class, () -> submarine.command("f"));
+//    }
 
+
+    private boolean assertThrowsErrorAndMessage(String desired_error_message, Executable runnable) {
+        RuntimeException exception = assertThrows(RuntimeException.class, runnable, "Expected to throw RuntimeException, but it didn't");
+        return exception.getMessage().equals(desired_error_message);
+    }
 
     private Direction north() { return new NorthDirection(); }
-    private Point zeroPoint() { return new Point(0,0,0); }
+    private Point zeroPoint() { return new Point(0,0); }
 }

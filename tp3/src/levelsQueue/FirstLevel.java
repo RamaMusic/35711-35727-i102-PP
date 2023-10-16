@@ -2,11 +2,9 @@ package levelsQueue;
 
 import java.util.ArrayList;
 
-public class DeepWatersLevel extends Level {
-    public static RuntimeException SUBMARINE_HAS_EXPLODED = new RuntimeException("The submarine has exploded!");
-
+public class FirstLevel extends Level {
     @Override
-    public void throwBomb() { throw SUBMARINE_HAS_EXPLODED; }
+    public void throwBomb() { }
 
     @Override
     public ArrayList<Level> goUp(ArrayList<Level> data, int depth) {

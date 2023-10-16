@@ -20,11 +20,6 @@ public class SouthDirection extends Direction{
     }
 
     @Override
-    public Point move(Point position) {
-        return new Point(position.getX(), position.getY() - 1, position.getZ());
-    }
-
-    @Override
     public ArrayList<Integer> getVector() {
         return new ArrayList<>(Arrays.asList(0, -1));
     }

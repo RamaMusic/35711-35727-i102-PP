@@ -1,9 +1,9 @@
-package submarineOLD.submarine;
+package submarineOLD.position;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class EastDirection extends Direction{
+public class EastDirection extends Direction {
     @Override
     public Direction turnLeft() {
         return new NorthDirection();
@@ -15,12 +15,10 @@ public class EastDirection extends Direction{
     }
 
     @Override
-    public String getDirection() {
+    public String getDirectionStr() {
         return "e";
     }
 
     @Override
-    public ArrayList<Integer> getVector() {
-        return new ArrayList<>(Arrays.asList(1, 0));
-    }
+    public ArrayList<Integer> getVector() { return new ArrayList<>(Arrays.asList(1, 0)); }
 }
