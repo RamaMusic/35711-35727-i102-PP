@@ -15,11 +15,6 @@ public class SouthDirection extends Direction{
     }
 
     @Override
-    public String getDirectionStr() {
-        return "s";
-    }
-
-    @Override
     public ArrayList<Integer> getVector() {
         return new ArrayList<>(Arrays.asList(0, -1));
     }
