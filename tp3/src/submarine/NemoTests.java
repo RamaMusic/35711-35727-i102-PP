@@ -75,7 +75,7 @@ public class NemoTests {
     public void test08CommandMThrowsCapsule() {
         Nemo submarine = new Nemo(zeroPoint(), north());
         submarine.command("m");
-        assertTrue(submarine.hasThrownBomb());
+        assertEquals(0, submarine.getDepth());
     }
 
     @Test
@@ -140,7 +140,7 @@ public class NemoTests {
     }
 
     @Test
-    public void test18ComplexMovement() { // TODO Cambiar el nombre.
+    public void test18ComplexMovement() { // TODO Ver por qué podemos cambiar este test, es bastante inútil.
         Nemo submarine = new Nemo(zeroPoint(), north());
         submarine.command("frfdddddflfuuu");
         assertEquals(new Point(2,2), submarine.getPosition());
@@ -151,29 +151,30 @@ public class NemoTests {
     public void test19BombIsThrownInTheSurface() {
         Nemo submarine = new Nemo(zeroPoint(), north());
         submarine.command("m");
-        assertTrue(submarine.hasThrownBomb());
+        assertEquals(0, submarine.getDepth());
     }
 
     @Test
     public void test20BombIsThrownInShallowWaters() {
         Nemo submarine = new Nemo(zeroPoint(), north());
-        submarine.command("ddm");
-        assertTrue(submarine.hasThrownBomb());
+        submarine.command("dm");
+        assertEquals(-1, submarine.getDepth());
     }
 
     @Test
     public void test21CanNotThrowCapsuleInDeepWaters() {
         Nemo submarine = new Nemo(new Point(0, 0), north());
         assertTrue(assertThrowsErrorAndMessage("The submarine has exploded!", () -> submarine.command("ddm") ) );
-        assertFalse(submarine.hasThrownBomb());
     }
 
     @Test
-    public void test22SubmarineDiesAfterCommandDFLLFFDDAAAFFDDM() { // TODO Cambiar este test a algo decente.
+    public void test22SubmarineDiesAfterCommandDFLLFFDDAAAFFDDM() { // TODO Cambiar este test a que la bomba se tire en el medio y falle igual.
         Nemo submarine = new Nemo(zeroPoint(), north());
         assertTrue(assertThrowsErrorAndMessage("The submarine has exploded!", () -> submarine.command("dfllffdduuuffddm") ) );
     }
 
+    // TODO Test de: nemo puede lanzar la cápsula mutliples veces, nemo puede tirar la capsula en varias posiciones (tipo, comando MDM por ejemplo) tambien que si tengo un string como DDRFFRFUDMLRUUR me devuelva el error igualmente (m se tira en medio)
+    // TODO meter algun for extraño para mostrar que no hay limites de profundidad ni de puntos. ¿Otro test que sea UUUUUUU para mostrar que no va a salir del agua nunca?
 
     private boolean assertThrowsErrorAndMessage(String error_message, Executable runnable) {
         RuntimeException exception = assertThrows(RuntimeException.class, runnable, "Expected to throw RuntimeException, but it didn't");

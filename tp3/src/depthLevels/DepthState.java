@@ -21,7 +21,7 @@ public class DepthState {
         return - ( getLastIndex() );
     }
 
-    public boolean throwBomb() { return getLastLevel().throwBomb(); }
+    public void throwBomb() { getLastLevel().throwBomb(); }
 
     private int getLastIndex() {
         return this.data.size() - 1;

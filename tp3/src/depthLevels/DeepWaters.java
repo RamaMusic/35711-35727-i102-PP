@@ -6,7 +6,7 @@ class DeepWaters extends WaterLevel {
     public static RuntimeException SUBMARINE_HAS_EXPLODED = new RuntimeException( "The submarine has exploded!" );
 
     @Override
-    public boolean throwBomb() { throw SUBMARINE_HAS_EXPLODED; }
+    public void throwBomb() { throw SUBMARINE_HAS_EXPLODED; }
 
     @Override
     public ArrayList<WaterLevel> goUp(ArrayList<WaterLevel> data, int depth ) {

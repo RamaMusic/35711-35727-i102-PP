@@ -10,7 +10,6 @@ public class Nemo {
     private Direction direction;
     private Point position;
     private DepthState depth = new DepthState();
-    private Boolean bombThrown = false;
     private HashMap <Character, Runnable> commands = new HashMap<>();
 
     public Nemo(Point position, Direction direction){
@@ -35,8 +34,6 @@ public class Nemo {
 
     public int getDepth() { return depth.getDepth(); }
 
-    public boolean hasThrownBomb() { return bombThrown; } // TODO Cambiarle el nombre a estas variables.
-
     private void executeCommand(String instruction) {
         commands.get(instruction.charAt(0)).run();
     }  // TODO Cambiar el hashmap a diferentes subclases y un filter.
@@ -45,7 +42,7 @@ public class Nemo {
         commands.put('u', () -> depth = depth.ascend());
         commands.put('l', () -> direction = direction.turnLeft());
         commands.put('r', () -> direction = direction.turnRight());
-        commands.put('f', ()-> position = direction.move(position));
-        commands.put('m', () -> bombThrown = depth.throwBomb());
+        commands.put('f', () -> position = direction.move(position));
+        commands.put('m', () -> depth.throwBomb());
     }
 }

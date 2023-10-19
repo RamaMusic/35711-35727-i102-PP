@@ -3,7 +3,7 @@ package depthLevels;
 import java.util.ArrayList;
 
 abstract class WaterLevel {
-    public boolean throwBomb() { return true; }
+    public void throwBomb() { }
     public abstract ArrayList<WaterLevel> goUp(ArrayList<WaterLevel> data, int depth );
     public abstract ArrayList<WaterLevel> goDown(ArrayList<WaterLevel> data );
     public int hashCode() { return this.getClass().hashCode(); }
