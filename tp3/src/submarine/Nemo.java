@@ -3,46 +3,49 @@ package submarine;
 import depthLevels.DepthState;
 import position.Direction;
 import position.Point;
+import commands.Command;
+
 
 import java.util.HashMap;
 
 public class Nemo {
+
     private Direction direction;
     private Point position;
     private DepthState depth = new DepthState();
-    private HashMap <Character, Runnable> commands = new HashMap<>();
 
-    public Nemo(Point position, Direction direction){
+    public Nemo( Point position, Direction direction ) {
         this.position = position;
         this.direction = direction;
-        createCommands();
     }
 
     // TODO lo dejo anotado acá. Sacar todos los packages y dejar un solo package con todas las clases adentro.
 
-    public void command (Character instruction) {
-        this.command(instruction.toString());
-    } // This should fix the issues when sending the commands with '' instead of ""
+    public void command ( Character instruction ) { this.command( instruction.toString() ); }
 
-    public void command(String instructions) {
-        instructions.toLowerCase().chars().forEach(ch -> executeCommand(String.valueOf((char) ch)));
-    } // Add extra tests to show that it accepts both lowercase and uppercase. Also Strings and chars.
+    public void command( String instructions ) {
+        instructions.toLowerCase().chars().forEach( ch -> executeCommand( (char) ch ) );
+    }
+
+    public void descend() { depth = depth.descend(); }
+
+    public void ascend() { depth = depth.ascend(); }
+
+    public void turnLeft() { direction = direction.turnLeft();}
+
+    public void turnRight() { direction = direction.turnRight(); }
+
+    public void moveForward() { position = direction.move(position); }
+
+    public void throwBomb() { depth.throwBomb(); }
+
+    private void executeCommand( Character instruction ) {
+        Command.runnableFor( instruction ).runCommand( this );
+    }
 
     public Point getPosition() { return position; }
 
     public Direction getDirection() { return direction; }
 
     public int getDepth() { return depth.getDepth(); }
-
-    private void executeCommand(String instruction) {
-        commands.get(instruction.charAt(0)).run();
-    }  // TODO Cambiar el hashmap a diferentes subclases y un filter.
-    private void createCommands() {
-        commands.put('d', () -> depth = depth.descend());
-        commands.put('u', () -> depth = depth.ascend());
-        commands.put('l', () -> direction = direction.turnLeft());
-        commands.put('r', () -> direction = direction.turnRight());
-        commands.put('f', () -> position = direction.move(position));
-        commands.put('m', () -> depth.throwBomb());
-    }
 }

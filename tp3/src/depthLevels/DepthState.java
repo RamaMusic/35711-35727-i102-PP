@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 
 public class DepthState {
+
     private ArrayList<WaterLevel> data = new ArrayList<>( Arrays.asList( new SurfaceWaters() ) );
 
     public DepthState ascend() {
@@ -28,4 +29,5 @@ public class DepthState {
     }
 
     private WaterLevel getLastLevel() { return this.data.get( getLastIndex() ); }
+
 }

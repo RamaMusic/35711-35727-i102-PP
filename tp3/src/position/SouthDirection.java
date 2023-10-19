@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class SouthDirection extends Direction{
+
     @Override
     public Direction turnLeft() {
         return new EastDirection();
@@ -16,6 +17,7 @@ public class SouthDirection extends Direction{
 
     @Override
     public ArrayList<Integer> getVector() {
-        return new ArrayList<>(Arrays.asList(0, -1));
+        return new ArrayList<>( Arrays.asList( 0, -1 ) );
     }
+
 }

@@ -11,12 +11,12 @@ public abstract class Direction {
 
     public abstract ArrayList<Integer> getVector();
 
-    public int hashCode() { return Objects.hash(this.getClass()); }
+    public int hashCode() { return Objects.hash( this.getClass() ); }
 
-    public boolean equals(Object other) {
-        return other.getClass() == this.getClass();
+    public boolean equals( Object other ) {
+        return other.getClass().equals( this.getClass() );
     }
 
-    public Point move(Point position) { return position.add(getVector()); }
+    public Point move( Point position ) { return position.add( getVector() ); }
 
 }

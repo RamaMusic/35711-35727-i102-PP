@@ -1,5 +1,6 @@
 package submarine;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
@@ -11,96 +12,91 @@ import position.WestDirection;
 import position.Point;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class NemoTests {
 
+    Nemo submarine;
+
+    @BeforeEach
+    public void setUp() {
+        submarine = new Nemo(zeroPoint(), north());
+    }
+
     @Test
     public void test01SubmarineStartsInCorrectPlace() {
-        Nemo submarine = new Nemo(new Point(2, 4), south());
-        assertEquals(new Point(2, 4), submarine.getPosition());
-        assertEquals(0, submarine.getDepth());
-        assertEquals(south(), submarine.getDirection());
+        submarine = new Nemo(new Point(2, 4), south());
+        checkPositionDirectionAndDepth(new Point(2, 4), south(), 0);
     }
 
     @Test
     public void test02CommandCanBeEmpty() {
-        Nemo submarine = new Nemo(new Point(2, 8), south());
+        submarine = new Nemo(new Point(2, 8), south());
         submarine.command("");
-        assertEquals(new Point(2, 8), submarine.getPosition());
-        assertEquals(0, submarine.getDepth());
-        assertEquals(south(), submarine.getDirection());
+        checkPositionDirectionAndDepth(new Point(2, 8), south(), 0);
     }
 
     @Test
     public void test03CommandDDescends() {
-        Nemo submarine = new Nemo(zeroPoint(), north());
         submarine.command("d");
-        assertEquals(-1, submarine.getDepth());
+        assertDepthIs(-1);
     }
 
     @Test
     public void test04CommandUAscends() {
-        Nemo submarine = new Nemo(zeroPoint(), north());
         submarine.command("d");
+        assertDepthIs(-1);
         submarine.command("u");
-        assertEquals(0, submarine.getDepth());
+        assertDepthIs(0);
     }
+
+
 
     @Test
     public void test05CommandRRotatesToTheRight() {
-        Nemo submarine = new Nemo(zeroPoint(), north());
         submarine.command("r");
         assertEquals(east(), submarine.getDirection());
     }
 
     @Test
     public void test06CommandLRotatesToTheLeft() {
-        Nemo submarine = new Nemo(zeroPoint(), north());
         submarine.command("l");
         assertEquals(west(), submarine.getDirection());
     }
 
     @Test
     public void test07CommandFMovesForward() {
-        Nemo submarine = new Nemo(zeroPoint(), north());
         submarine.command("f");
         assertEquals(new Point(0,1), submarine.getPosition());
     }
 
     @Test
     public void test08CommandMThrowsCapsule() {
-        Nemo submarine = new Nemo(zeroPoint(), north());
+        assertDepthIs(0);
         submarine.command("m");
-        assertEquals(0, submarine.getDepth());
+        assertDepthIs(0);
     }
 
     @Test
     public void test09CommandsCanBeSentAsAString() {
-        Nemo submarine = new Nemo(zeroPoint(), north());
         submarine.command("ddrf");
-        assertEquals(new Point(1,0), submarine.getPosition());
-        assertEquals(-2, submarine.getDepth());
-        assertEquals(east(), submarine.getDirection());
+        checkPositionDirectionAndDepth(new Point(1,0), east(), -2);
     }
 
     @Test
     public void test10CommandsCanBeSentAsChar() {
-        Nemo submarine = new Nemo(zeroPoint(), north());
-        assertEquals(0, submarine.getDepth());
+        assertDepthIs(0);
         submarine.command('d');
-        assertEquals(-1, submarine.getDepth());
+        assertDepthIs(-1);
     }
 
     @Test
     public void test11CommandsAreNotCaseSensitive() {
-        Nemo submarine = new Nemo(zeroPoint(), north());
-        assertEquals(0, submarine.getDepth());
+        assertDepthIs(0);
         submarine.command("Dd");
-        assertEquals(-2, submarine.getDepth());
+        assertDepthIs(-2);
     }
 
     @Test
@@ -125,56 +121,64 @@ public class NemoTests {
 
     @Test
     public void test16EachDirectionHasCorrectVector() {
-        Nemo submarine = new Nemo(zeroPoint(), north());
         submarine.command("ffrffrffrffr");
-        assertEquals(new Point(0,0), submarine.getPosition());
-        assertEquals(new NorthDirection(), submarine.getDirection());
+        checkPositionDirectionAndDepth(zeroPoint(), north(), 0);
     }
 
     // TODO Falta refactorizar todos los tests de arriba. Eso sería todo lo relacionado a dirección - rotación.
 
     @Test
     public void test17DepthIsLimitedTo0() {
-        Nemo submarine = new Nemo(zeroPoint(), north());
         assertTrue(assertThrowsErrorAndMessage("You can not go up from the surface level.", () -> submarine.command("u") ) );
+        assertDepthIs(0);
     }
 
     @Test
     public void test18ComplexMovement() { // TODO Ver por qué podemos cambiar este test, es bastante inútil.
-        Nemo submarine = new Nemo(zeroPoint(), north());
         submarine.command("frfdddddflfuuu");
-        assertEquals(new Point(2,2), submarine.getPosition());
-        assertEquals(-2, submarine.getDepth());
+        checkPositionDirectionAndDepth(new Point(2,2), north(), -2);
     }
 
     @Test
     public void test19BombIsThrownInTheSurface() {
-        Nemo submarine = new Nemo(zeroPoint(), north());
         submarine.command("m");
-        assertEquals(0, submarine.getDepth());
+        checkPositionDirectionAndDepth(zeroPoint(), north(), 0);
     }
 
     @Test
     public void test20BombIsThrownInShallowWaters() {
-        Nemo submarine = new Nemo(zeroPoint(), north());
         submarine.command("dm");
-        assertEquals(-1, submarine.getDepth());
+        checkPositionDirectionAndDepth(new Point(0,0), north(), -1);
     }
 
     @Test
     public void test21CanNotThrowCapsuleInDeepWaters() {
-        Nemo submarine = new Nemo(new Point(0, 0), north());
         assertTrue(assertThrowsErrorAndMessage("The submarine has exploded!", () -> submarine.command("ddm") ) );
     }
 
     @Test
-    public void test22SubmarineDiesAfterCommandDFLLFFDDAAAFFDDM() { // TODO Cambiar este test a que la bomba se tire en el medio y falle igual.
-        Nemo submarine = new Nemo(zeroPoint(), north());
-        assertTrue(assertThrowsErrorAndMessage("The submarine has exploded!", () -> submarine.command("dfllffdduuuffddm") ) );
+    public void test22LastPositionAndDirectionIsWhereItHasExploded() {
+        assertTrue(assertThrowsErrorAndMessage("The submarine has exploded!", () -> submarine.command("ddffmfrf") ) );
+        checkPositionDirectionAndDepth(new Point(0,2), north(), -2);
+        assertEquals(new Point(0,2), submarine.getPosition());
     }
 
-    // TODO Test de: nemo puede lanzar la cápsula mutliples veces, nemo puede tirar la capsula en varias posiciones (tipo, comando MDM por ejemplo) tambien que si tengo un string como DDRFFRFUDMLRUUR me devuelva el error igualmente (m se tira en medio)
-    // TODO meter algun for extraño para mostrar que no hay limites de profundidad ni de puntos. ¿Otro test que sea UUUUUUU para mostrar que no va a salir del agua nunca?
+    @Test
+    public void test23SubmarineCanThrowMultipleCapsules() {
+        submarine.command("mmmdmmdf");
+        checkPositionDirectionAndDepth(new Point(0,1), north(), -2);
+    }
+
+    @Test
+    public void test24SubmarineCanNotGoUpEvenIfInsisted() {
+        assertTrue(assertThrowsErrorAndMessage("You can not go up from the surface level.", () -> submarine.command("uuu") ) );
+        assertDepthIs(0);
+        assertTrue(assertThrowsErrorAndMessage("You can not go up from the surface level.", () -> submarine.command("uuu") ) );
+        assertDepthIs(0);
+    }
+
+
+    // TODO meter algun for extraño para mostrar que no hay limites de profundidad ni de puntos.
 
     private boolean assertThrowsErrorAndMessage(String error_message, Executable runnable) {
         RuntimeException exception = assertThrows(RuntimeException.class, runnable, "Expected to throw RuntimeException, but it didn't");
@@ -196,5 +200,15 @@ public class NemoTests {
         boolean b = submarine.getDirection().equals(left);
 
         return a && b;
+    }
+
+    private void assertDepthIs(int depth) {
+        assertEquals(depth, submarine.getDepth());
+    }
+
+    private void checkPositionDirectionAndDepth(Point position, Direction direction, int depth) {
+        assertEquals(position, submarine.getPosition());
+        assertEquals(direction, submarine.getDirection());
+        assertDepthIs(depth);
     }
 }
