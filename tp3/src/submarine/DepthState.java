@@ -1,4 +1,4 @@
-package depthLevels;
+package submarine;
 
 import java.util.ArrayList;
 import java.util.Arrays;

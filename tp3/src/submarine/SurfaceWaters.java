@@ -1,4 +1,4 @@
-package depthLevels;
+package submarine;
 
 import java.util.ArrayList;
 
@@ -6,7 +6,7 @@ class SurfaceWaters extends WaterLevel {
 
     @Override
     public ArrayList<WaterLevel> goUp(ArrayList<WaterLevel> data, int depth ) {
-        throw new RuntimeException( "You can not go up from the surface level." );
+        return data;
     }
 
     @Override

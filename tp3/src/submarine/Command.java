@@ -1,6 +1,4 @@
-package commands;
-
-import submarine.Nemo;
+package submarine;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,8 +18,7 @@ public abstract class Command {
     public static Command runnableFor( Character instruction ) {
         return commands.stream()
                 .filter( command -> command.isSymbol( instruction ) )
-                .findFirst()
-                .orElse( null );
+                .findFirst().get();
     }
 
     public abstract void runCommand( Nemo submarine );

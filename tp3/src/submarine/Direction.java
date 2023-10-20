@@ -1,4 +1,4 @@
-package position;
+package submarine;
 
 import java.util.ArrayList;
 import java.util.Objects;

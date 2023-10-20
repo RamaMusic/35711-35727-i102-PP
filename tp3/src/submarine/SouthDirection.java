@@ -1,23 +1,23 @@
-package position;
+package submarine;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class WestDirection extends Direction{
+public class SouthDirection extends Direction{
 
     @Override
     public Direction turnLeft() {
-        return new SouthDirection();
+        return new EastDirection();
     }
 
     @Override
     public Direction turnRight() {
-        return new NorthDirection();
+        return new WestDirection();
     }
 
     @Override
     public ArrayList<Integer> getVector() {
-        return new ArrayList<>( Arrays.asList( -1, 0 ) );
+        return new ArrayList<>( Arrays.asList( 0, -1 ) );
     }
 
 }

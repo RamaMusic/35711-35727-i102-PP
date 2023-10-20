@@ -1,15 +1,6 @@
 package submarine;
 
-import depthLevels.DepthState;
-import position.Direction;
-import position.Point;
-import commands.Command;
-
-
-import java.util.HashMap;
-
 public class Nemo {
-
     private Direction direction;
     private Point position;
     private DepthState depth = new DepthState();
@@ -19,12 +10,10 @@ public class Nemo {
         this.direction = direction;
     }
 
-    // TODO lo dejo anotado acá. Sacar todos los packages y dejar un solo package con todas las clases adentro.
-
     public void command ( Character instruction ) { this.command( instruction.toString() ); }
 
     public void command( String instructions ) {
-        instructions.toLowerCase().chars().forEach( ch -> executeCommand( (char) ch ) );
+        instructions.chars().forEach( ch -> executeCommand( (char) ch ) );
     }
 
     public void descend() { depth = depth.descend(); }

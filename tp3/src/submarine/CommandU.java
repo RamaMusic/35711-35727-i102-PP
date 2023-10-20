@@ -1,6 +1,4 @@
-package commands;
-
-import submarine.Nemo;
+package submarine;
 
 public class CommandU extends Command{
     public CommandU() { symbol = 'u'; }
