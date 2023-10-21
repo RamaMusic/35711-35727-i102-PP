@@ -15,7 +15,7 @@ public class Command {
             new Command( 'r', Submarine::turnRight ),
             new Command( 'd', Submarine::descend ),
             new Command( 'u', Submarine::ascend ),
-            new Command( 'm', Submarine::throwBomb )
+            new Command( 'm', Submarine::throwCapsule)
     ));
 
     public Command( char symbol, Consumer<Submarine> command ) {

@@ -17,6 +17,10 @@ public class Point {
         return new Point( x + vector.get( 0 ), y + vector.get( 1 ) );
     }
 
+    public Integer getX() { return x; }
+
+    public Integer getY() { return y; }
+
     public boolean equals( Object other ) {
         if ( other.getClass() != this.getClass() ) return false;
         Point otherPoint = (Point) other;
@@ -24,9 +28,5 @@ public class Point {
     }
 
     public int hashCode() { return Objects.hash( x, y ); }
-
-    public Integer getX() { return x; }
-
-    public Integer getY() { return y; }
 
 }

@@ -27,7 +27,7 @@ public class Submarine {
 
     public void moveForward() { position = direction.move(position); }
 
-    public void throwBomb() { depth.throwBomb(); }
+    public void throwCapsule() { depth.throwBomb(); }
 
 
     private void executeCommand( Character instruction ) {

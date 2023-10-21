@@ -22,7 +22,7 @@ public class DepthState {
         return - ( getLastIndex() );
     }
 
-    public void throwBomb() { getLastLevel().throwBomb(); }
+    public void throwBomb() { getLastLevel().throwCapsule(); }
 
     private int getLastIndex() {
         return this.data.size() - 1;

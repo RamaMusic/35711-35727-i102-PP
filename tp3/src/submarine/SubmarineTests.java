@@ -2,12 +2,9 @@ package submarine;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 
 public class SubmarineTests {
 
@@ -78,24 +75,16 @@ public class SubmarineTests {
     }
 
     @Test
-    public void test11NorthRotatesCorrectly() {
-        assertTrue(DirectionRotatesCorrectly(zeroPoint(), north(), east(), west()));
-    }
+    public void test11NorthRotatesCorrectly() { AssertDirectionRotatesCorrectly(zeroPoint(), north(), east(), west()); }
 
     @Test
-    public void test12SouthRotatesCorrectly() {
-        assertTrue(DirectionRotatesCorrectly(zeroPoint(), south(), west(), east()));
-    }
+    public void test12SouthRotatesCorrectly() { AssertDirectionRotatesCorrectly(zeroPoint(), south(), west(), east()); }
 
     @Test
-    public void test13EastRotatesCorrectly() {
-        assertTrue(DirectionRotatesCorrectly(zeroPoint(), east(), south(), north()));
-    }
+    public void test13EastRotatesCorrectly() { AssertDirectionRotatesCorrectly(zeroPoint(), east(), south(), north()); }
 
     @Test
-    public void test14WestRotatesCorrectly() {
-        assertTrue(DirectionRotatesCorrectly(zeroPoint(), west(), north(), south()));
-    }
+    public void test14WestRotatesCorrectly() { AssertDirectionRotatesCorrectly(zeroPoint(), west(), north(), south()); }
 
     @Test
     public void test15EachDirectionHasCorrectVector() {
@@ -120,26 +109,22 @@ public class SubmarineTests {
     }
 
     @Test
-    public void test19BombIsThrownInTheSurface() {
+    public void test19CapsuleIsThrownInTheSurface() {
         checkCapsuleDoesNotAffectPosition("m", 0, 0);
     }
 
     @Test
-    public void test20BombIsThrownInShallowWaters() {
+    public void test20CapsuleIsThrownInShallowWaters() {
         checkCapsuleDoesNotAffectPosition("dm", 0, -1);
     }
 
     @Test
-    public void test21CanNotThrowCapsuleInDeepWaters() {
-        assertThrowsErrorAndMessage(DeepWaters.SUBMARINE_HAS_EXPLODED, () -> nemo.command("ddm") );
-    }
+    public void test21CanNotThrowCapsuleInDeepWaters() { assertSubmarineHasExplodedWithCommand("ddm"); }
 
     @Test
     public void test22LastPositionAndDirectionIsWhereItHasExploded() {
         nemo.command("ddff");
-        checkPositionDirectionAndDepthBeforeAndAfterCommand(
-                () -> assertThrowsErrorAndMessage(DeepWaters.SUBMARINE_HAS_EXPLODED, () -> nemo.command("mfrf") )
-                , new Point(0,2),north(),-2);
+        checkPositionDirectionAndDepthBeforeAndAfterCommand( () -> assertSubmarineHasExplodedWithCommand("mfrf"), new Point(0,2),north(),-2 );
     }
 
     @Test
@@ -154,20 +139,25 @@ public class SubmarineTests {
     private Direction west() { return new WestDirection(); }
     private Point zeroPoint() { return new Point(0,0); }
 
-    private void assertThrowsErrorAndMessage(String error_message, Executable runnable) {
-        RuntimeException exception = assertThrows(RuntimeException.class, runnable, "Expected to throw RuntimeException, but it didn't");
-        assertEquals(exception.getMessage(), error_message);
+    private void assertSubmarineHasExplodedWithCommand(String command) {
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> nemo.command(command), "Expected to throw RuntimeException, but it didn't");
+        assertEquals(exception.getMessage(), DeepWaters.SUBMARINE_HAS_EXPLODED);
     }
 
-    private boolean DirectionRotatesCorrectly(Point init_poi, Direction init_dir, Direction right, Direction left) {
+    private void checkPositionDirectionAndDepthBeforeAndAfterCommand(Runnable runnable, Point position, Direction direction, int depth) {
+        checkPositionDirectionAndDepth(position, direction, depth);
+        runnable.run();
+        checkPositionDirectionAndDepth(position, direction, depth);
+    }
+
+    private void AssertDirectionRotatesCorrectly(Point init_poi, Direction init_dir, Direction right, Direction left) {
         Submarine nemo = new Submarine(init_poi, init_dir);
 
         nemo.command("r");
-        boolean a = nemo.getDirection().equals(right);
-        nemo.command("ll");
-        boolean b = nemo.getDirection().equals(left);
+        assertEquals(right, nemo.getDirection());
 
-        return a && b;
+        nemo.command("ll");
+        assertEquals(left, nemo.getDirection());
     }
 
     private void checkPositionDirectionAndDepth(Point position, Direction direction, int depth) {
@@ -186,11 +176,5 @@ public class SubmarineTests {
         checkPositionDirectionAndDepth(zeroPoint(), north(), depth);
         nemo.command( command );
         checkPositionDirectionAndDepth(zeroPoint(), north(), expectedDepth);
-    }
-
-    private void checkPositionDirectionAndDepthBeforeAndAfterCommand(Runnable runnable, Point position, Direction direction, int depth) {
-        checkPositionDirectionAndDepth(position, direction, depth);
-        runnable.run();
-        checkPositionDirectionAndDepth(position, direction, depth);
     }
 }
