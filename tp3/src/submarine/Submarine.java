@@ -1,11 +1,11 @@
 package submarine;
 
-public class Nemo {
+public class Submarine {
     private Direction direction;
     private Point position;
     private DepthState depth = new DepthState();
 
-    public Nemo( Point position, Direction direction ) {
+    public Submarine(Point position, Direction direction ) {
         this.position = position;
         this.direction = direction;
     }
@@ -15,6 +15,7 @@ public class Nemo {
     public void command( String instructions ) {
         instructions.chars().forEach( ch -> executeCommand( (char) ch ) );
     }
+
 
     public void descend() { depth = depth.descend(); }
 
@@ -28,9 +29,11 @@ public class Nemo {
 
     public void throwBomb() { depth.throwBomb(); }
 
+
     private void executeCommand( Character instruction ) {
         Command.runnableFor( instruction ).runCommand( this );
     }
+
 
     public Point getPosition() { return position; }
 
