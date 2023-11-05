@@ -23,12 +23,12 @@ public class Linea {
     public Linea(int base, int height, char gamemode) {
 
         if (base < 4 || height < 4) {
-            throw new IllegalArgumentException("Base and height must be greater than 3");
+            throw new RuntimeException("Base and height must be greater than 3");
         }
 
         //TODO cuando hagamos la clase gamemode esto cambia a un contains.
         if (gamemode != 'C' && gamemode != 'A' && gamemode != 'B') {
-            throw new IllegalArgumentException("Gamemode must be A, B or C");
+            throw new RuntimeException("Gamemode must be A, B or C");
         }
 
         this.base = base;
@@ -57,29 +57,34 @@ public class Linea {
 
     public Linea playRedAt(int column) {
         if ( !this.isRedTurn() ) {
-            throw new IllegalArgumentException("It's not red's turn");
+            throw new RuntimeException("It's not red's turn");
         }
 
-        playGame(column, redSlot);
+        stackSlot(column, redSlot);
         return this;
     }
 
     public Linea playBlueAt(int column) {
         if ( !this.isBlueTurn() ) {
-            throw new IllegalArgumentException("It's not blue's turn");
+            throw new RuntimeException("It's not blue's turn");
         }
 
-        playGame(column, blueSlot);
+        stackSlot(column, blueSlot);
         return this;
     }
 
-    private void playGame(int column, char slot) {
-        if (column > this.base) {
-            throw new IllegalArgumentException("Column must be between 1 and " + this.base);
+    private void stackSlot(int column, char slotSymbol) {
+
+        if (this.finished) {
+            throw new RuntimeException("Game is finished");
+        }
+
+        if (column > this.base || column < 1) {
+            throw new RuntimeException("Column must be between 1 and " + this.base);
         }
 
         if (this.board.get(0).get(column - 1) != emptySlot) {
-            throw new IllegalArgumentException("Column " + column + " is full");
+            throw new RuntimeException("Column " + column + " is full");
         }
 
         int row = IntStream.range(0, this.height)
@@ -87,7 +92,7 @@ public class Linea {
                 .reduce((first, second) -> second)
                 .orElse(this.height - 1);
 
-        this.board.get(row).set(column - 1, slot);
+        this.board.get(row).set(column - 1, slotSymbol);
         this.redTurn = !this.redTurn;
     }
 
@@ -95,7 +100,7 @@ public class Linea {
     public String show() {
         String border = "╚" + "═".repeat(this.base * 2 + 1) + "╝";
 
-        // TODO Preguntar si quiere numeros o no
+        // TODO Preguntar si quiere números o no
         String numbers = "  " + IntStream.rangeClosed(1, this.base)
                 .mapToObj(i -> String.valueOf(i % 10))
                 .collect(Collectors.joining(" "))
