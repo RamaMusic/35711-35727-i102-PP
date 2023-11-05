@@ -1,5 +1,7 @@
 package Linea;
 
+import Linea.OLD.Linea;
+
 public class ExampleInterface {
 
     public static void main( String[] args ) throws Exception {
