@@ -145,8 +145,7 @@ public class LineaTest {
 
     @Test
     public void test13PlayerWinsOnTrivialHorizontalLine() {
-        game = new Linea( 4,4,'B' );
-        assertFalse(placeRedChipsHorizontally().finished());
+        assertTrue(placeRedChipsHorizontally().finished());
     }
 
     @Test
@@ -160,21 +159,42 @@ public class LineaTest {
     }
 
     @Test
-    public void test16PlayerWinsOnTrivialDiagonalLineAndGameModeB() {
+    public void test16PlayerWinsOnTrivialDiagonalLineInGameModeB() {
         game = new Linea( 4,4,'B' );
         assertTrue(placeRedChipsDiagonally().finished());
     }
 
     @Test
-    public void test17PlayerDoesNotWinOnTrivalVerticalLine() {
+    public void test17PlayerDoesNotWinOnTrivalVerticalLineInGameModeB() {
         game = new Linea( 4,4,'B' );
         assertFalse(placeRedChipsVertically().finished());
     }
 
     @Test
-    public void test18PlayerWinsOnTrivialHorizontalLine() {
+    public void test18PlayerDoesNotWinsOnTrivialHorizontalLineInGameModeB() {
         game = new Linea( 4,4,'B' );
         assertFalse(placeRedChipsHorizontally().finished());
+    }
+
+    @Test
+    public void test19CheckDraw() {
+        game = new Linea(4, 4, 'A');
+        game.playRedAt(1)
+                .playBlueAt(2)
+                .playRedAt(3)
+                .playBlueAt(4)
+                .playRedAt(2)
+                .playBlueAt(1)
+                .playRedAt(4)
+                .playBlueAt(3)
+                .playRedAt(1)
+                .playBlueAt(2)
+                .playRedAt(3)
+                .playBlueAt(4)
+                .playRedAt(2)
+                .playBlueAt(1)
+                .playRedAt(4);
+        assertThrowsError(() -> game.playBlueAt(3), "The game has ended in a draw!");
     }
 
     // TODO hacer tests para ganar con azul!11uno

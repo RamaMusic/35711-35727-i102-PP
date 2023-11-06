@@ -21,6 +21,8 @@ public class Linea {
 
     private boolean finished = false;
 
+    private String winner = "";
+
 
     public Linea(int base, int height, char gameMode) {
 
@@ -48,7 +50,9 @@ public class Linea {
         return board.get(row - 1).get(column - 1);
     }
 
-    public boolean finished() { return finished; }
+    public boolean finished() {
+        return finished;
+    }
 
     public boolean isRedTurn() {
         return redTurn;
@@ -59,7 +63,7 @@ public class Linea {
     }
 
     public Linea playRedAt(int column) {
-        if ( !this.isRedTurn() ) {
+        if (!this.isRedTurn()) {
             throw new RuntimeException("It's not red's turn");
         }
 
@@ -68,7 +72,7 @@ public class Linea {
     }
 
     public Linea playBlueAt(int column) {
-        if ( !this.isBlueTurn() ) {
+        if (!this.isBlueTurn()) {
             throw new RuntimeException("It's not blue's turn");
         }
 
@@ -97,6 +101,13 @@ public class Linea {
 
         this.board.get(row).set(column - 1, slotSymbol);
         finished = checkVictory(slotSymbol);
+        winner = finished ? String.valueOf(slotSymbol) : "";
+        if (checkDraw()) {
+            winner = "draw";
+            finished = true;
+            throw new RuntimeException("The game has ended in a draw!");
+        }
+
         this.redTurn = !this.redTurn;
     }
 
@@ -117,9 +128,15 @@ public class Linea {
                         .collect(Collectors.joining(" ")) + " ║")
                 .collect(Collectors.joining("\n"));
 
+        if (this.finished) {
+            // numbers = "The game has ended.\nWinner: " + this.winner;
+            numbers = "The game has ended" + ((this.winner.equals("draw")) ? " in a draw!" : ".\nWinner: " + this.winner);
+        }
+
         return "\n" + boardContent + "\n" + border + "\n" + numbers;
     }
 
+    // TODO hacer polimorfismo con el modo de juego.
     private boolean checkVictory(char slotSymbol) {
         if (gameMode == 'A') {
             return checkHorizontalVictory(slotSymbol) || checkVerticalVictory(slotSymbol);
@@ -155,4 +172,9 @@ public class Linea {
                                 .allMatch(i -> this.board.get(row + i).get(column - i) == slotSymbol)));
     }
 
+    private boolean checkDraw() {
+        return IntStream.range(0, this.base)
+                .allMatch(column -> this.board.get(0).get(column) != emptySlot);
     }
+
+}
