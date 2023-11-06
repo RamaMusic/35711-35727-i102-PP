@@ -13,6 +13,8 @@ public class Linea {
     static char redSlot = 'X'; // Rojas == Negras == X
     static char blueSlot = 'O'; // Azules == Blancas == O
 
+    private char gameMode;
+
     private List<List<Character>> board;
 
     private boolean redTurn = true;
@@ -20,19 +22,20 @@ public class Linea {
     private boolean finished = false;
 
 
-    public Linea(int base, int height, char gamemode) {
+    public Linea(int base, int height, char gameMode) {
 
         if (base < 4 || height < 4) {
             throw new RuntimeException("Base and height must be greater than 3");
         }
 
         //TODO cuando hagamos la clase gamemode esto cambia a un contains.
-        if (gamemode != 'C' && gamemode != 'A' && gamemode != 'B') {
+        if (gameMode != 'C' && gameMode != 'A' && gameMode != 'B') {
             throw new RuntimeException("Gamemode must be A, B or C");
         }
 
         this.base = base;
         this.height = height;
+        this.gameMode = gameMode;
 
         this.board = IntStream.range(0, this.height)
                 .mapToObj(i -> IntStream.range(0, this.base)
@@ -93,6 +96,7 @@ public class Linea {
                 .orElse(this.height - 1);
 
         this.board.get(row).set(column - 1, slotSymbol);
+        finished = checkVictory(slotSymbol);
         this.redTurn = !this.redTurn;
     }
 
@@ -115,4 +119,40 @@ public class Linea {
 
         return "\n" + boardContent + "\n" + border + "\n" + numbers;
     }
-}
+
+    private boolean checkVictory(char slotSymbol) {
+        if (gameMode == 'A') {
+            return checkHorizontalVictory(slotSymbol) || checkVerticalVictory(slotSymbol);
+        } else if (gameMode == 'B') {
+            return checkDiagonalVictory(slotSymbol);
+        } else {
+            return checkHorizontalVictory(slotSymbol) || checkVerticalVictory(slotSymbol) || checkDiagonalVictory(slotSymbol);
+        }
+    }
+
+    private boolean checkHorizontalVictory(char slotSymbol) {
+        return IntStream.range(0, this.height)
+                .anyMatch(row -> IntStream.range(0, this.base - 3)
+                        .anyMatch(column -> IntStream.range(0, 4)
+                                .allMatch(i -> this.board.get(row).get(column + i) == slotSymbol)));
+    }
+
+    private boolean checkVerticalVictory(char slotSymbol) {
+        return IntStream.range(0, this.base)
+                .anyMatch(column -> IntStream.range(0, this.height - 3)
+                        .anyMatch(row -> IntStream.range(0, 4)
+                                .allMatch(i -> this.board.get(row + i).get(column) == slotSymbol)));
+    }
+
+    private boolean checkDiagonalVictory(char slotSymbol) {
+        return IntStream.range(0, this.height - 3)
+                .anyMatch(row -> IntStream.range(0, this.base - 3)
+                        .anyMatch(column -> IntStream.range(0, 4)
+                                .allMatch(i -> this.board.get(row + i).get(column + i) == slotSymbol)))
+                || IntStream.range(0, this.height - 3)
+                .anyMatch(row -> IntStream.range(3, this.base)
+                        .anyMatch(column -> IntStream.range(0, 4)
+                                .allMatch(i -> this.board.get(row + i).get(column - i) == slotSymbol)));
+    }
+
+    }

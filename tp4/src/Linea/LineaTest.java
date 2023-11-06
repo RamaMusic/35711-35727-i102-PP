@@ -1,5 +1,6 @@
 package Linea;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,6 +15,11 @@ public class LineaTest {
     @BeforeEach
     public void setUp() {
         game = new Linea( 4,4,'A' );
+    }
+
+    @AfterEach
+    public void printGame() {
+        System.out.println(game.show());
     }
 
     @Test
@@ -135,6 +141,76 @@ public class LineaTest {
 
         assertEquals(expected, game.show());
         assertEquals(Linea.redSlot, game.getCharAtPosition(3, 3));
+    }
+
+    @Test
+    public void test13PlayerWinsOnTrivialHorizontalLine() {
+        game = new Linea( 4,4,'B' );
+        assertFalse(placeRedChipsHorizontally().finished());
+    }
+
+    @Test
+    public void test14PlayerWinsOnTrivialVerticalLine() {
+        assertTrue(placeRedChipsVertically().finished());
+    }
+
+    @Test
+    public void test15PlayerDoesNotWinOnTrivialDiagonalLineAndGameModeA() {
+        assertFalse(placeRedChipsDiagonally().finished());
+    }
+
+    @Test
+    public void test16PlayerWinsOnTrivialDiagonalLineAndGameModeB() {
+        game = new Linea( 4,4,'B' );
+        assertTrue(placeRedChipsDiagonally().finished());
+    }
+
+    @Test
+    public void test17PlayerDoesNotWinOnTrivalVerticalLine() {
+        game = new Linea( 4,4,'B' );
+        assertFalse(placeRedChipsVertically().finished());
+    }
+
+    @Test
+    public void test18PlayerWinsOnTrivialHorizontalLine() {
+        game = new Linea( 4,4,'B' );
+        assertFalse(placeRedChipsHorizontally().finished());
+    }
+
+    // TODO hacer tests para ganar con azul!11uno
+
+    private Linea placeRedChipsHorizontally() {
+        return game.playRedAt(1)
+                .playBlueAt(1)
+                .playRedAt(2)
+                .playBlueAt(2)
+                .playRedAt(3)
+                .playBlueAt(3)
+                .playRedAt(4);
+    }
+
+    private Linea placeRedChipsVertically() {
+        return game.playRedAt(1)
+                .playBlueAt(2)
+                .playRedAt(1)
+                .playBlueAt(2)
+                .playRedAt(1)
+                .playBlueAt(2)
+                .playRedAt(1);
+    }
+
+    private Linea placeRedChipsDiagonally() {
+       return game.playRedAt(1)
+                .playBlueAt(2)
+                .playRedAt(2)
+                .playBlueAt(3)
+                .playRedAt(4)
+                .playBlueAt(3)
+                .playRedAt(3)
+                .playBlueAt(4)
+                .playRedAt(3)
+                .playBlueAt(4)
+                .playRedAt(4);
     }
 
     private void assertThrowsError( Executable runnable, String expectedError ) {
