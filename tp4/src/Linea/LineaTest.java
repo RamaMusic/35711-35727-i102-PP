@@ -8,6 +8,7 @@ import org.junit.jupiter.api.function.Executable;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 public class LineaTest {
 
     private Linea game;
@@ -195,6 +196,28 @@ public class LineaTest {
                 .playBlueAt(1)
                 .playRedAt(4);
         assertThrowsError(() -> game.playBlueAt(3), "The game has ended in a draw!");
+    }
+
+    @Test
+    public void test20BlueWinsDiagonallyIn6x6Board() {
+        game = new Linea(6, 6, 'C');
+        game.playRedAt(1)
+                .playBlueAt(2)
+                .playRedAt(2)
+                .playBlueAt(3)
+                .playRedAt(4)
+                .playBlueAt(3)
+                .playRedAt(3)
+                .playBlueAt(4)
+                .playRedAt(3)
+                .playBlueAt(4)
+                .playRedAt(2)
+                .playBlueAt(5)
+                .playRedAt(5)
+                .playBlueAt(5)
+                .playRedAt(1)
+                .playBlueAt(5);
+        assertTrue(game.finished());
     }
 
     // TODO hacer tests para ganar con azul!11uno

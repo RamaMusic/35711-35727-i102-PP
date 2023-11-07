@@ -24,6 +24,7 @@ public class Linea {
     private String winner = "";
 
 
+
     public Linea(int base, int height, char gameMode) {
 
         if (base < 4 || height < 4) {
@@ -135,6 +136,8 @@ public class Linea {
 
         return "\n" + boardContent + "\n" + border + "\n" + numbers;
     }
+
+    public boolean checkVictoryA( char slotSymbol ) {}
 
     // TODO hacer polimorfismo con el modo de juego.
     private boolean checkVictory(char slotSymbol) {

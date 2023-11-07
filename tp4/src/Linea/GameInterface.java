@@ -1,61 +1,49 @@
 package Linea;
 public class GameInterface {
 
-    public static void main( String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
 
-        System.out.println( "Dimensiones?");
+        System.out.println("Dimensiones?");
 
-        Linea game = new Linea( promptAsInt( "Base? " ),
+        Linea game = new Linea(promptAsInt("Base? "),
 
-                promptAsInt( "Altura? " ),
+                promptAsInt("Altura? "),
 
-                promptAsChar( "Estartegia de Juego: A, B o C? " ) );
+                promptAsChar("Estrategia de Juego: A, B o C? "));
 
+        System.out.println(game.show());
 
+        while (!game.finished()) {
 
-        System.out.println( game.show() );
+            game.playRedAt(promptAsInt("Rojas? "));
 
+            System.out.println(game.show());
 
+            if (!game.finished()) {
 
-        while ( !game.finished() ) {
+                game.playBlueAt(promptAsInt("Azul? "));
 
-            game.playRedAt( promptAsInt( "Rojas? " ) );
-
-            System.out.println( game.show() );
-
-
-
-            if ( !game.finished() ) {
-
-                game.playBlueAt( promptAsInt( "Azul? " ) );
-
-                System.out.println( game.show() );
+                System.out.println(game.show());
 
             }
 
         }
 
+    }
 
+    private static int promptAsInt(String message) {
+
+        System.out.print(message);
+
+        return Integer.parseInt(System.console().readLine());
 
     }
 
+    private static char promptAsChar(String message) {
 
+        System.out.print(message);
 
-    private static int promptAsInt( String message ) {
-
-        System.out.print( message );
-
-        return Integer.parseInt( System.console().readLine() );
-
-    }
-
-
-
-    private static char promptAsChar( String message ) {
-
-        System.out.print( message );
-
-        return System.console().readLine().charAt( 0 );
+        return System.console().readLine().charAt(0);
 
     }
 
