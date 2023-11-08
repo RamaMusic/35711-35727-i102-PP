@@ -10,7 +10,7 @@ public class Linea {
 
     public static char RED_SLOT         = 'X'; //= 'R';
     public static char BLUE_SLOT        = 'O'; //= 'B';
-    public static char UNMAKRED_SLOT    = '·';
+    public static char UNMARKED_SLOT = '·';
 
     private int BASE;
     private int HEIGHT;
@@ -42,18 +42,22 @@ public class Linea {
     }
 
     public Linea playRedAt( int desiredColumn ) {
-        // TODO Hacer funcion para verificar quien ganó o perdió, también ver si hay empate.
 
         this.TURN = TURN.playRedAs( desiredColumn, this);
+        verifyIfGameHasEnded( RED_SLOT );
+
         return this;
     }
 
     public Linea playBlueAt( int desiredColumn ) {
-        // TODO Hacer funcion para verificar quien ganó o perdió, también ver si hay empate.
 
         this.TURN = TURN.playBlueAs( desiredColumn, this);
+        verifyIfGameHasEnded( BLUE_SLOT );
+
         return this;
     }
+
+    private void verifyIfGameHasEnded(char slot) { if ( this.FINISHED ) { this.TURN = new GameFinished( slot ); } }
 
     public void stackSlotOn( int desiredColumn, char color ) {
         desiredColumn--;
@@ -68,17 +72,9 @@ public class Linea {
 
         this.BOARD.get( desiredColumn ).add( color );
 
-        this.WINNER = color == RED_SLOT ? "Red" : "Blue"; // TODO Sacar este if y ver de hacer que no se actualice siempre si no que solo cuando ganen.
         this.FINISHED = GAMEMODE.checkVictory( color, this );
     }
 
-    public int getHeight() { return this.HEIGHT; }
-
-    public int getBase() { return this.BASE; }
-
-    public List<List<Character>> getBoard() { return this.BOARD; }
-
-    public Turn getTurn() { return this.TURN; }
 // TODO buscar alternativas a esta garcha, es muy feo.
     public char getCharAtPosition(int row, int column) {
         return IntStream.range(0, this.BOARD.size())
@@ -89,7 +85,7 @@ public class Linea {
                 .stream()
                 .skip(Math.max(0, this.HEIGHT - row - 1))
                 .findFirst()
-                .orElse(UNMAKRED_SLOT);
+                .orElse(UNMARKED_SLOT);
     }
 
 
@@ -97,8 +93,8 @@ public class Linea {
 //        return this.BOARD.stream()
 //                .skip(column)
 //                .findFirst()
-//                .map(list -> list.size() > this.HEIGHT - 1 - row ? list.get(this.HEIGHT - 1 - row) : UNMAKRED_SLOT)
-//                .orElse(UNMAKRED_SLOT);
+//                .map(list -> list.size() > this.HEIGHT - 1 - row ? list.get(this.HEIGHT - 1 - row) : UNMARKED_SLOT)
+//                .orElse(UNMARKED_SLOT);
 //    }
 
 
@@ -106,12 +102,12 @@ public class Linea {
 //        try {
 //            return this.BOARD.get(column).get(this.HEIGHT - 1 - row);
 //        } catch (IndexOutOfBoundsException e) {
-//            return UNMAKRED_SLOT;
+//            return UNMARKED_SLOT;
 //        }
 //    }
 
     public boolean finished() {
-        return FINISHED;
+        return this.getTurn().isFinished();
     }
 
     public String show() {
@@ -131,10 +127,14 @@ public class Linea {
                         + " ║\n")
                 .collect(Collectors.joining());
 
-        if (this.finished()) {
-            bottom_status = "Game finished!\n" + this.WINNER + " won!\n";
-        }
         return "\n" + board_content + bottom_border + "\n" + numbers + bottom_status;
-//        return "\n" + board_content + bottom_border + "\n" + numbers;
     }
+
+    public int getHeight() { return this.HEIGHT; }
+
+    public int getBase() { return this.BASE; }
+
+    public List<List<Character>> getBoard() { return this.BOARD; }
+
+    public Turn getTurn() { return this.TURN; }
 }

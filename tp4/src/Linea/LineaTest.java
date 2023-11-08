@@ -44,7 +44,7 @@ public class LineaTest {
                 .forEach(row ->
                         IntStream.rangeClosed(1, 4)
                                 .forEach(column ->
-                                        assertEquals(game.getCharAtPosition(row, column), Linea.UNMAKRED_SLOT)
+                                        assertEquals(game.getCharAtPosition(row, column), Linea.UNMARKED_SLOT)
                                 )
                 );
 
@@ -77,7 +77,7 @@ public class LineaTest {
     public void test07BoardPrintsCorrectly() {
 
         String expected = """
-                                
+
                 ║ · · · · ║
                 ║ · · · · ║
                 ║ · · · · ║
@@ -99,7 +99,7 @@ public class LineaTest {
     public void test09CanPlaceOneChipInAnEmptyBoard() {
         game.playRedAt(3);
         String expected = """
-                                
+
                 ║ · · · · ║
                 ║ · · · · ║
                 ║ · · · · ║
@@ -117,7 +117,7 @@ public class LineaTest {
         game.playRedAt(3).playBlueAt(3);
 
         String expected = """
-                                
+
                 ║ · · · · ║
                 ║ · · · · ║
                 ║ · · O · ║
@@ -142,7 +142,7 @@ public class LineaTest {
         game.playRedAt(3).playBlueAt(2).playRedAt(3);
 
         String expected = """
-                                
+
                 ║ · · · · ║
                 ║ · · · · ║
                 ║ · · X · ║
@@ -241,7 +241,7 @@ public class LineaTest {
         game = new Linea(20, 20, 'C');
     }
 
-    // TODO hacer tests para ganar con azul!11uno
+    // TODO hacer tests para ganar con azul!11uno, remover tests innecesarios, refactorizar!!1
 
     private Linea placeRedChipsHorizontally() {
         return game.playRedAt(1)

@@ -19,4 +19,8 @@ public abstract class Turn {
     public boolean equals(Object other) {
         return other.getClass() == this.getClass();
     }
+
+    public boolean isFinished() {
+        return false;
+    }
 }
