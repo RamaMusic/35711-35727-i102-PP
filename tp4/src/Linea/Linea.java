@@ -16,10 +16,9 @@ public class Linea {
     private int HEIGHT;
 
     private boolean FINISHED;
-    private String WINNER = "";
 
     private GameMode GAMEMODE;
-    private Turn TURN;
+    private GameManager GAME_STATE;
 
     private List<List<Character>> BOARD = new ArrayList<List<Character>>();
 
@@ -38,12 +37,12 @@ public class Linea {
 
         // IntStream.range(0, this.height).forEach(i -> this.board.add(new ArrayList<Character>()));
 
-        this.TURN = new RedTurn();
+        this.GAME_STATE = new RedTurn();
     }
 
     public Linea playRedAt( int desiredColumn ) {
 
-        this.TURN = TURN.playRedAs( desiredColumn, this);
+        this.GAME_STATE = GAME_STATE.playRedAs( desiredColumn, this);
         verifyIfGameHasEnded( RED_SLOT );
 
         return this;
@@ -51,13 +50,13 @@ public class Linea {
 
     public Linea playBlueAt( int desiredColumn ) {
 
-        this.TURN = TURN.playBlueAs( desiredColumn, this);
+        this.GAME_STATE = GAME_STATE.playBlueAs( desiredColumn, this);
         verifyIfGameHasEnded( BLUE_SLOT );
 
         return this;
     }
 
-    private void verifyIfGameHasEnded(char slot) { if ( this.FINISHED ) { this.TURN = new GameFinished( slot ); } }
+    private void verifyIfGameHasEnded(char slot) { if ( this.FINISHED ) { this.GAME_STATE = new GameFinished( slot ); } }
 
     public void stackSlotOn( int desiredColumn, char color ) {
         desiredColumn--;
@@ -76,6 +75,7 @@ public class Linea {
     }
 
 // TODO buscar alternativas a esta garcha, es muy feo.
+//  Puedo usar un if ya que, técnicamente, estoy buscando que el elemento esté dentro de las listas, ¿no?
     public char getCharAtPosition(int row, int column) {
         return IntStream.range(0, this.BOARD.size())
                 .filter(i -> i == column)
@@ -113,7 +113,7 @@ public class Linea {
     public String show() {
         String bottom_border = "╚" + "═".repeat(this.BASE * 2 + 1) + "╝";
 
-        String bottom_status = TURN.getStatus() + "\n" ;
+        String bottom_status = GAME_STATE.getStatus() + "\n" ;
 
         String numbers = "  " + IntStream.rangeClosed(1, this.BASE)
                 .mapToObj(i -> String.valueOf(i % 10))
@@ -136,5 +136,5 @@ public class Linea {
 
     public List<List<Character>> getBoard() { return this.BOARD; }
 
-    public Turn getTurn() { return this.TURN; }
+    public GameManager getTurn() { return this.GAME_STATE; }
 }

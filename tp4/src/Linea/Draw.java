@@ -1,24 +1,14 @@
 package Linea;
 
-public class Draw extends Turn {
+public class Draw extends GameManager {
     @Override
-    public Turn playRedAs(int desiredColumn, Linea game) {
+    public GameManager playRedAs(int desiredColumn, Linea game) {
         throw new RuntimeException("The game has ended in a Draw!");
     }
 
     @Override
-    public Turn playBlueAs(int desiredColumn, Linea game) {
+    public GameManager playBlueAs(int desiredColumn, Linea game) {
         throw new RuntimeException("The game has ended in a Draw!");
-    }
-
-    @Override
-    public boolean isRedTurn() {
-        return false;
-    }
-
-    @Override
-    public boolean isBlueTurn() {
-        return false;
     }
 
     @Override

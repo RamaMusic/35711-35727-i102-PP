@@ -26,6 +26,8 @@ public class LineaTest {
     @AfterEach
     public void printGame() {
         System.out.println(game.show());
+        System.out.println("El turno actual es: " + game.getTurn());
+        System.out.println("El juego terminó: " + game.finished());
     }
 
     @Test

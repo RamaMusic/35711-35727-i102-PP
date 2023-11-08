@@ -1,14 +1,10 @@
 package Linea;
 
-public abstract class Turn {
+public abstract class GameManager {
 
-    public abstract Turn playRedAs(int desiredColumn, Linea game);
+    public abstract GameManager playRedAs(int desiredColumn, Linea game);
 
-    public abstract Turn playBlueAs(int desiredColumn, Linea game);
-
-    public abstract boolean isRedTurn();
-
-    public abstract boolean isBlueTurn();
+    public abstract GameManager playBlueAs(int desiredColumn, Linea game);
 
     public abstract String getStatus();
 
