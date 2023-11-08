@@ -1,183 +1,140 @@
 package Linea;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Linea {
 
-    private int base;
-    private int height;
+    public static char RED_SLOT         = 'X'; //= 'R';
+    public static char BLUE_SLOT        = 'O'; //= 'B';
+    public static char UNMAKRED_SLOT    = '·';
 
-    static char emptySlot = '·';
-    static char redSlot = 'X'; // Rojas == Negras == X
-    static char blueSlot = 'O'; // Azules == Blancas == O
+    private int BASE;
+    private int HEIGHT;
 
-    private char gameMode;
+    private boolean FINISHED;
+    private String WINNER = "";
 
-    private List<List<Character>> board;
+    private GameMode GAMEMODE;
+    private Turn TURN;
 
-    private boolean redTurn = true;
+    private List<List<Character>> BOARD = new ArrayList<List<Character>>();
 
-    private boolean finished = false;
+    public Linea(int base, int height, char mode) {
 
-    private String winner = "";
+        if (base < 4 || height < 4) { throw new RuntimeException("Base and height must be greater than 3."); }
 
+        this.BASE = base;
+        this.HEIGHT = height;
+        this.GAMEMODE = GameMode.getGamemodeFor( mode );
 
+        // TODO Ambos hacen lo mismo, decidir cuál es más "coherente"
+        this.BOARD = IntStream.range(0, this.BASE)
+                    .mapToObj(i -> new ArrayList<Character>())
+                    .collect(Collectors.toList());
 
-    public Linea(int base, int height, char gameMode) {
+        // IntStream.range(0, this.height).forEach(i -> this.board.add(new ArrayList<Character>()));
 
-        if (base < 4 || height < 4) {
-            throw new RuntimeException("Base and height must be greater than 3");
-        }
-
-        //TODO cuando hagamos la clase gamemode esto cambia a un contains.
-        if (gameMode != 'C' && gameMode != 'A' && gameMode != 'B') {
-            throw new RuntimeException("Gamemode must be A, B or C");
-        }
-
-        this.base = base;
-        this.height = height;
-        this.gameMode = gameMode;
-
-        this.board = IntStream.range(0, this.height)
-                .mapToObj(i -> IntStream.range(0, this.base)
-                        .mapToObj(j -> emptySlot)
-                        .collect(Collectors.toList()))
-                .toList();
+        this.TURN = new RedTurn();
     }
 
+    public Linea playRedAt( int desiredColumn ) {
+        // TODO Hacer funcion para verificar quien ganó o perdió, también ver si hay empate.
+
+        this.TURN = TURN.playRedAs( desiredColumn, this);
+        return this;
+    }
+
+    public Linea playBlueAt( int desiredColumn ) {
+        // TODO Hacer funcion para verificar quien ganó o perdió, también ver si hay empate.
+
+        this.TURN = TURN.playBlueAs( desiredColumn, this);
+        return this;
+    }
+
+    public void stackSlotOn( int desiredColumn, char color ) {
+        desiredColumn--;
+
+        if ( desiredColumn < 0 || desiredColumn >= this.BASE ) {
+            throw new RuntimeException("Column must be between 1 and " + this.BASE + "." );
+        }
+
+        if ( this.BOARD.get( desiredColumn ).size() == this.HEIGHT ) {
+            throw new RuntimeException("Column " + (desiredColumn + 1)+ " is full.");
+        }
+
+        this.BOARD.get( desiredColumn ).add( color );
+
+        this.WINNER = color == RED_SLOT ? "Red" : "Blue"; // TODO Sacar este if y ver de hacer que no se actualice siempre si no que solo cuando ganen.
+        this.FINISHED = GAMEMODE.checkVictory( color, this );
+    }
+
+    public int getHeight() { return this.HEIGHT; }
+
+    public int getBase() { return this.BASE; }
+
+    public List<List<Character>> getBoard() { return this.BOARD; }
+
+    public Turn getTurn() { return this.TURN; }
+// TODO buscar alternativas a esta garcha, es muy feo.
     public char getCharAtPosition(int row, int column) {
-        return board.get(row - 1).get(column - 1);
+        return IntStream.range(0, this.BOARD.size())
+                .filter(i -> i == column)
+                .mapToObj(i -> this.BOARD.get(i))
+                .findFirst()
+                .orElse(Collections.emptyList())
+                .stream()
+                .skip(Math.max(0, this.HEIGHT - row - 1))
+                .findFirst()
+                .orElse(UNMAKRED_SLOT);
     }
+
+
+//    public char getCharAtPosition(int row, int column) {
+//        return this.BOARD.stream()
+//                .skip(column)
+//                .findFirst()
+//                .map(list -> list.size() > this.HEIGHT - 1 - row ? list.get(this.HEIGHT - 1 - row) : UNMAKRED_SLOT)
+//                .orElse(UNMAKRED_SLOT);
+//    }
+
+
+//    public char getCharAtPosition(int row, int column) {
+//        try {
+//            return this.BOARD.get(column).get(this.HEIGHT - 1 - row);
+//        } catch (IndexOutOfBoundsException e) {
+//            return UNMAKRED_SLOT;
+//        }
+//    }
 
     public boolean finished() {
-        return finished;
+        return FINISHED;
     }
-
-    public boolean isRedTurn() {
-        return redTurn;
-    }
-
-    public boolean isBlueTurn() {
-        return !redTurn;
-    }
-
-    public Linea playRedAt(int column) {
-        if (!this.isRedTurn()) {
-            throw new RuntimeException("It's not red's turn");
-        }
-
-        stackSlot(column, redSlot);
-        return this;
-    }
-
-    public Linea playBlueAt(int column) {
-        if (!this.isBlueTurn()) {
-            throw new RuntimeException("It's not blue's turn");
-        }
-
-        stackSlot(column, blueSlot);
-        return this;
-    }
-
-    private void stackSlot(int column, char slotSymbol) {
-
-        if (this.finished) {
-            throw new RuntimeException("Game is finished");
-        }
-
-        if (column > this.base || column < 1) {
-            throw new RuntimeException("Column must be between 1 and " + this.base);
-        }
-
-        if (this.board.get(0).get(column - 1) != emptySlot) {
-            throw new RuntimeException("Column " + column + " is full");
-        }
-
-        int row = IntStream.range(0, this.height)
-                .filter(r -> this.board.get(r).get(column - 1) == emptySlot)
-                .reduce((first, second) -> second)
-                .orElse(this.height - 1);
-
-        this.board.get(row).set(column - 1, slotSymbol);
-        finished = checkVictory(slotSymbol);
-        winner = finished ? String.valueOf(slotSymbol) : "";
-        if (checkDraw()) {
-            winner = "draw";
-            finished = true;
-            throw new RuntimeException("The game has ended in a draw!");
-        }
-
-        this.redTurn = !this.redTurn;
-    }
-
 
     public String show() {
-        String border = "╚" + "═".repeat(this.base * 2 + 1) + "╝";
+        String bottom_border = "╚" + "═".repeat(this.BASE * 2 + 1) + "╝";
 
-        // TODO Preguntar si quiere números o no
-        String numbers = "  " + IntStream.rangeClosed(1, this.base)
+        String bottom_status = TURN.getStatus() + "\n" ;
+
+        String numbers = "  " + IntStream.rangeClosed(1, this.BASE)
                 .mapToObj(i -> String.valueOf(i % 10))
                 .collect(Collectors.joining(" "))
                 + "\n";
 
+        String board_content = IntStream.range(0, this.HEIGHT)
+                .mapToObj(i -> "║ " + IntStream.range(0, this.BASE)
+                        .mapToObj(j -> String.valueOf(this.getCharAtPosition(i, j)))
+                        .collect(Collectors.joining(" "))
+                        + " ║\n")
+                .collect(Collectors.joining());
 
-        String boardContent = this.board.stream()
-                .map(row -> "║ " + row.stream()
-                        .map(String::valueOf)
-                        .collect(Collectors.joining(" ")) + " ║")
-                .collect(Collectors.joining("\n"));
-
-        if (this.finished) {
-            // numbers = "The game has ended.\nWinner: " + this.winner;
-            numbers = "The game has ended" + ((this.winner.equals("draw")) ? " in a draw!" : ".\nWinner: " + this.winner);
+        if (this.finished()) {
+            bottom_status = "Game finished!\n" + this.WINNER + " won!\n";
         }
-
-        return "\n" + boardContent + "\n" + border + "\n" + numbers;
+        return "\n" + board_content + bottom_border + "\n" + numbers + bottom_status;
+//        return "\n" + board_content + bottom_border + "\n" + numbers;
     }
-
-    public boolean checkVictoryA( char slotSymbol ) {}
-
-    // TODO hacer polimorfismo con el modo de juego.
-    private boolean checkVictory(char slotSymbol) {
-        if (gameMode == 'A') {
-            return checkHorizontalVictory(slotSymbol) || checkVerticalVictory(slotSymbol);
-        } else if (gameMode == 'B') {
-            return checkDiagonalVictory(slotSymbol);
-        } else {
-            return checkHorizontalVictory(slotSymbol) || checkVerticalVictory(slotSymbol) || checkDiagonalVictory(slotSymbol);
-        }
-    }
-
-    private boolean checkHorizontalVictory(char slotSymbol) {
-        return IntStream.range(0, this.height)
-                .anyMatch(row -> IntStream.range(0, this.base - 3)
-                        .anyMatch(column -> IntStream.range(0, 4)
-                                .allMatch(i -> this.board.get(row).get(column + i) == slotSymbol)));
-    }
-
-    private boolean checkVerticalVictory(char slotSymbol) {
-        return IntStream.range(0, this.base)
-                .anyMatch(column -> IntStream.range(0, this.height - 3)
-                        .anyMatch(row -> IntStream.range(0, 4)
-                                .allMatch(i -> this.board.get(row + i).get(column) == slotSymbol)));
-    }
-
-    private boolean checkDiagonalVictory(char slotSymbol) {
-        return IntStream.range(0, this.height - 3)
-                .anyMatch(row -> IntStream.range(0, this.base - 3)
-                        .anyMatch(column -> IntStream.range(0, 4)
-                                .allMatch(i -> this.board.get(row + i).get(column + i) == slotSymbol)))
-                || IntStream.range(0, this.height - 3)
-                .anyMatch(row -> IntStream.range(3, this.base)
-                        .anyMatch(column -> IntStream.range(0, 4)
-                                .allMatch(i -> this.board.get(row + i).get(column - i) == slotSymbol)));
-    }
-
-    private boolean checkDraw() {
-        return IntStream.range(0, this.base)
-                .allMatch(column -> this.board.get(0).get(column) != emptySlot);
-    }
-
 }

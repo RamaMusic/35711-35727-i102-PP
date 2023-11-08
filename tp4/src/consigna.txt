@@ -11,10 +11,10 @@ El juego puede terminar por triunfo o por empate. Una vez terminado no se puede 
 Es requisito cumplir con todos los criterios vistos a lo largo de la cursada.
 
 Se ofrece una pequeña interfaz de línea de comandos para correr por consola:
-Debe respetarse el protocolo definido para Linea, el constructor y los mensajes playBlueAt, playRedAt, finished y show.
+Debe respetarse el protocolo definido para LineaOLD, el constructor y los mensajes playBlueAt, playRedAt, finished y show.
 
 NEGRAS = ROJAS = X
 BLANCAS = AZULES = O
 
-Ver archivo "Linea.ExampleInterface.java"
+Ver archivo "LineaOLD.ExampleInterface.java"
 

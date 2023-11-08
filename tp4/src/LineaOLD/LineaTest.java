@@ -1,4 +1,4 @@
-package Linea;
+package LineaOLD;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -6,12 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import org.junit.jupiter.api.function.Executable;
 
-import java.util.stream.IntStream;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class LineaTest {
@@ -30,47 +25,44 @@ public class LineaTest {
 
     @Test
     public void test01CannotInitializeBoardSmallerThan4x4() {
-        assertThrowsError(() -> new Linea(3, 4, 'A'), "Base and height must be greater than 3.");
+        assertThrowsError(() -> new Linea(3, 4, 'A'), "Base and height must be greater than 3");
     }
 
     @Test
     public void test02CannotInitializeBoardOnInvalidGamemode() {
-        assertThrowsError(() -> new Linea(4, 4, 'E'), "Gamemode must be A, B or C.");
+        assertThrowsError(() -> new Linea(4, 4, 'E'), "Gamemode must be A, B or C");
     }
 
     @Test
     public void test03BoardIsInitializedEmptyCorrectly() {
-        IntStream.rangeClosed(1, 4)
-                .forEach(row ->
-                        IntStream.rangeClosed(1, 4)
-                                .forEach(column ->
-                                        assertEquals(game.getCharAtPosition(row, column), Linea.UNMAKRED_SLOT)
-                                )
-                );
-
+        for (int row = 1; row <= 4; row++) {
+            for (int column = 1; column <= 4; column++) {
+                assertEquals(game.getCharAtPosition(row, column), Linea.emptySlot);
+            }
+        }
 
         assertFalse(game.finished());
     }
 
     @Test
     public void test04FirstTurnIsRed() {
-        assertEquals(new RedTurn(), game.getTurn());
+        assertTrue(game.isRedTurn());
     }
 
     @Test
     public void test05CannotPlaceChipOutsideTheBoard() {
-        assertThrowsError(() -> game.playRedAt(5), "Column must be between 1 and 4.");
+        assertThrowsError(() -> game.playRedAt(5), "Column must be between 1 and 4");
     }
 
     @Test
     public void test05BPlacingAChipOutsideALargerBoardThrowsDifferentExceptionMessage() {
         game = new Linea(6, 6, 'A');
-        assertThrowsError(() -> game.playRedAt(8), "Column must be between 1 and 6.");
+        assertThrowsError(() -> game.playRedAt(8), "Column must be between 1 and 6");
     }
 
     @Test
     public void test06CCannotPlaceChipAtColumnZero() {
-        assertThrowsError(() -> game.playRedAt(0), "Column must be between 1 and 4.");
+        assertThrowsError(() -> game.playRedAt(0), "Column must be between 1 and 4");
     }
 
     @Test
@@ -84,7 +76,6 @@ public class LineaTest {
                 ║ · · · · ║
                 ╚═════════╝
                   1 2 3 4
-                It's red's turn!
                 """;
 
         assertEquals(expected, game.show());
@@ -106,11 +97,10 @@ public class LineaTest {
                 ║ · · X · ║
                 ╚═════════╝
                   1 2 3 4
-                It's blue's turn!
                 """;
         assertEquals(expected, game.show());
-        assertEquals(Linea.RED_SLOT, game.getCharAtPosition(3, 2));
-        assertEquals(new BlueTurn(), game.getTurn());
+        assertEquals(Linea.redSlot, game.getCharAtPosition(4, 3));
+        assertFalse(game.isRedTurn());
     }
 
     @Test public void test10ChipsStackOnTopOfEachOther() {
@@ -124,17 +114,16 @@ public class LineaTest {
                 ║ · · X · ║
                 ╚═════════╝
                   1 2 3 4
-                It's red's turn!
                 """;
 
         assertEquals(expected, game.show());
-        assertEquals(Linea.BLUE_SLOT, game.getCharAtPosition(2, 2));
+        assertEquals(Linea.blueSlot, game.getCharAtPosition(3, 3));
     }
 
     @Test public void test11CannotPlayOnAFullColumn() {
         game.playRedAt(3).playBlueAt(3).playRedAt(3).playBlueAt(3);
 
-        assertThrowsError(() -> game.playRedAt(3), "Column 3 is full.");
+        assertThrowsError(() -> game.playRedAt(3), "Column 3 is full");
     }
 
     @Test
@@ -149,12 +138,10 @@ public class LineaTest {
                 ║ · O X · ║
                 ╚═════════╝
                   1 2 3 4
-                It's blue's turn!
                 """;
 
         assertEquals(expected, game.show());
-        assertEquals(new BlueTurn(), game.getTurn());
-        assertEquals(Linea.RED_SLOT, game.getCharAtPosition(2, 2));
+        assertEquals(Linea.redSlot, game.getCharAtPosition(3, 3));
     }
 
     @Test
@@ -207,11 +194,8 @@ public class LineaTest {
                 .playBlueAt(4)
                 .playRedAt(2)
                 .playBlueAt(1)
-                .playRedAt(4)
-                .playBlueAt(3);
-
-        assertEquals(new Draw(), game.getTurn());
-
+                .playRedAt(4);
+        assertThrowsError(() -> game.playBlueAt(3), "The game has ended in a draw!");
     }
 
     @Test
@@ -264,7 +248,7 @@ public class LineaTest {
     }
 
     private Linea placeRedChipsDiagonally() {
-        return game.playRedAt(1)
+       return game.playRedAt(1)
                 .playBlueAt(2)
                 .playRedAt(2)
                 .playBlueAt(3)
