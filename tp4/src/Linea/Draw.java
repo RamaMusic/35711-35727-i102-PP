@@ -25,4 +25,7 @@ public class Draw extends Turn {
     public String getStatus() {
         return "The game has ended in a Draw!";
     }
+
+    @Override
+    public boolean isFinished() { return true; }
 }
