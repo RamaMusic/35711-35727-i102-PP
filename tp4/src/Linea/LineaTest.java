@@ -24,11 +24,7 @@ public class LineaTest {
     }
 
     @AfterEach
-    public void printGame() {
-        System.out.println(game.show());
-        System.out.println("El turno actual es: " + game.getStatus());
-        System.out.println("El juego terminó: " + game.finished());
-    }
+    public void printGame() { System.out.println(game.show()); }
 
     @Test
     public void test01CannotInitializeBoardSmallerThan4x4() {

@@ -8,12 +8,8 @@ public class BlueTurn extends GameManager {
 
     @Override
     public GameManager playBlueAs(int desiredColumn, Linea game) {
-        // TODO Decidir esto, aplica en los 2 turnos.
-        game.stackSlotOn(desiredColumn, Linea.BLUE_SLOT); // ¿ESTO LO TIENE QUE MANEJAR LA FICHA? ¿ESTA BIEN QUE LO MANEJE EL TURNO?
-        if (this.isDraw( game )) {
-            return new Draw();
-        }
-        return new RedTurn();
+        game.stackSlotOn(desiredColumn, Linea.BLUE_SLOT);
+        return this.isDraw(game) ? new Draw() : new RedTurn();
     }
 
     @Override

@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.stream.IntStream;
 
 public abstract class GameMode {
-
     protected char symbol;
 
     public static ArrayList<GameMode> gameModes = new ArrayList<GameMode>(Arrays.asList(new GameModeA(), new GameModeB(), new GameModeC()));

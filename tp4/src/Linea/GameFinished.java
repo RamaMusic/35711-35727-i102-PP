@@ -5,7 +5,7 @@ public class GameFinished extends GameManager {
     private String WINNER;
 
     public GameFinished(char winner) {
-        this.WINNER = winner == Linea.RED_SLOT ? "Red" : "Blue"; // TODO ¿Sacar este if?. Está bien que turno sepa quién ganó?
+        this.WINNER = winner == Linea.RED_SLOT ? "Red" : "Blue";
     }
 
     @Override
@@ -22,9 +22,7 @@ public class GameFinished extends GameManager {
 
     @Override
     public boolean equals(Object other) {
-        if (other.getClass() == GameFinished.class) {
-            return this.getStatus().equals(((GameFinished) other).getStatus());
-        }
+        if (other.getClass() == GameFinished.class) { return this.getStatus().equals(((GameFinished) other).getStatus()); }
         return false;
     }
 }

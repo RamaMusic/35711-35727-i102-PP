@@ -5,10 +5,7 @@ public class RedTurn extends GameManager {
     @Override
     public GameManager playRedAs(int desiredColumn, Linea game) {
         game.stackSlotOn(desiredColumn, Linea.RED_SLOT);
-        if (this.isDraw( game )) {
-            return new Draw();
-        }
-        return new BlueTurn();
+        return this.isDraw(game) ? new Draw() : new BlueTurn();
     }
 
     @Override
