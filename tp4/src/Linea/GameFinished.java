@@ -19,4 +19,12 @@ public class GameFinished extends GameManager {
 
     @Override
     public boolean isFinished() { return true; }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other.getClass() == GameFinished.class) {
+            return this.getStatus().equals(((GameFinished) other).getStatus());
+        }
+        return false;
+    }
 }

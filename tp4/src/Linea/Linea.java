@@ -88,16 +88,6 @@ public class Linea {
                 .orElse(UNMARKED_SLOT);
     }
 
-
-//    public char getCharAtPosition(int row, int column) {
-//        return this.BOARD.stream()
-//                .skip(column)
-//                .findFirst()
-//                .map(list -> list.size() > this.HEIGHT - 1 - row ? list.get(this.HEIGHT - 1 - row) : UNMARKED_SLOT)
-//                .orElse(UNMARKED_SLOT);
-//    }
-
-
 //    public char getCharAtPosition(int row, int column) {
 //        try {
 //            return this.BOARD.get(column).get(this.HEIGHT - 1 - row);
@@ -107,7 +97,7 @@ public class Linea {
 //    }
 
     public boolean finished() {
-        return this.getTurn().isFinished();
+        return this.getStatus().isFinished();
     }
 
     public String show() {
@@ -136,5 +126,5 @@ public class Linea {
 
     public List<List<Character>> getBoard() { return this.BOARD; }
 
-    public GameManager getTurn() { return this.GAME_STATE; }
+    public GameManager getStatus() { return this.GAME_STATE; }
 }

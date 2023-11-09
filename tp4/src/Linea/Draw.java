@@ -18,4 +18,5 @@ public class Draw extends GameManager {
 
     @Override
     public boolean isFinished() { return true; }
+
 }
