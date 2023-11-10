@@ -10,7 +10,7 @@ public class RedTurn extends GameManager {
 
     @Override
     public GameManager playBlueAs(int desiredColumn, Linea game) {
-        throw new RuntimeException("It's not blues's turn!");
+        throw new RuntimeException("It's not blue's turn!");
     }
 
     @Override

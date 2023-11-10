@@ -149,7 +149,7 @@ public class LineaTest {
                 ╚═════════╝
                   1 2 3 4
                 The game has finished.
-                The winner is: Red
+                The winner is: Red (X)
                 """;
         assertEquals(expected, game.show());
     }
@@ -166,7 +166,7 @@ public class LineaTest {
                 ╚═════════╝
                   1 2 3 4
                 The game has finished.
-                The winner is: Blue
+                The winner is: Blue (O)
                 """;
         assertEquals(expected, game.show());
     }
@@ -182,154 +182,178 @@ public class LineaTest {
                 ║ X O X O ║
                 ╚═════════╝
                   1 2 3 4
-                The game has ended in a Draw!
+                The game has finished in a Draw!
                 """;
         assertEquals(expected, game.show());
     }
 
     @Test
     public void test15CannotPlayBlueWhenItsRedTurn() {
-        assertThrows(RuntimeException.class, () -> game.playBlueAt(1));
+        assertThrowsError(() -> game.playBlueAt(1), "It's not blue's turn!");
     }
 
     @Test
-    public void test16CanPlaceOneChipInAnEmptyBoard() {
+    public void test16CannotPlayRedWhenItsBlueTurn() {
+        playGame(1);
+        assertThrowsError(() -> game.playRedAt(1), "It's not red's turn!");
+    }
+
+    @Test
+    public void test17CanPlaceOneChipInAnEmptyBoard() {
         assertEquals(Linea.RED_SLOT, playGame(3).getCharAtPosition(3, 2));
         assertEquals(new BlueTurn(), game.getStatus());
     }
 
-    @Test public void test17ChipsStackOnTopOfEachOther() {
+    @Test
+    public void test18ChipsStackOnTopOfEachOther() {
         assertEquals(Linea.BLUE_SLOT, playGame(3, 3).getCharAtPosition(2, 2));
     }
 
-    @Test public void test18CannotPlayOnAFullColumn() {
+    @Test
+    public void test19CannotPlayOnAFullColumn() {
         assertThrowsError(() -> playGame(3,3,3,3,3), "Column 3 is full.");
     }
 
     @Test
-    public void test19ChipsCanStackEvenIfSameColor() {
+    public void test20ChipsCanStackEvenIfSameColor() {
         assertEquals(Linea.RED_SLOT, playGame(3, 2, 3).getCharAtPosition(2, 2));
     }
 
     @Test
-    public void test20ModeAPlayerRedWinsOnHorizontalLine() {
+    public void test21ModeAPlayerRedWinsOnHorizontalLine() {
         assertEquals(redWinsStatus(), placeRedChipsHorizontally().getStatus());
     }
 
     @Test
-    public void test21ModeAPlayerBlueWinsOnHorizontalLine() {
+    public void test22ModeAPlayerBlueWinsOnHorizontalLine() {
         assertEquals(blueWinsStatus(), placeBlueChipsHorizontally().getStatus());
     }
 
     @Test
-    public void test22ModeAPlayerRedWinsOnVerticalLine() {
+    public void test23ModeAPlayerRedWinsOnVerticalLine() {
         assertEquals(redWinsStatus(), placeRedChipsVertically().getStatus());
     }
 
     @Test
-    public void test23ModeAPlayerBlueWinsOnVerticalLine() {
+    public void test24ModeAPlayerBlueWinsOnVerticalLine() {
         assertEquals(blueWinsStatus(), placeBlueChipsVertically().getStatus());
     }
 
     @Test
-    public void test24ModeAPlayerRedDoesNotWinOnDiagonalLine() { assertFalse(placeRedChipsDiagonally().finished()); }
+    public void test25ModeAPlayerRedDoesNotWinOnDiagonalLine() { assertFalse(placeRedChipsDiagonally().finished()); }
 
     @Test
-    public void test25ModeAPlayerBlueDoesNotWinOnDiagonalLine() { assertFalse(placeBlueChipsDiagonally().finished()); }
+    public void test26ModeAPlayerBlueDoesNotWinOnDiagonalLine() { assertFalse(placeBlueChipsDiagonally().finished()); }
 
     @Test
-    public void test26ModeAGameCanFinishOnDrawIfNoneWins() {
+    public void test27ModeAGameCanFinishOnDrawIfNoneWins() {
         assertEquals(drawStatus(), playDraw().getStatus());
     }
 
     @Test
-    public void test27ModeBPlayerRedDoesNotWinOnHorizontalLine() {
+    public void test28ModeBPlayerRedDoesNotWinOnHorizontalLine() {
         game = newLineaB();
         assertFalse(placeRedChipsHorizontally().finished());
     }
 
     @Test
-    public void test28ModeBPlayerBlueDoesNotWinOnHorizontalLine() {
+    public void test29ModeBPlayerBlueDoesNotWinOnHorizontalLine() {
         game = newLineaB();
         assertFalse(placeBlueChipsHorizontally().finished());
     }
 
     @Test
-    public void test29ModeBPlayerRedDoesNotWinOnVerticalLine() {
+    public void test30ModeBPlayerRedDoesNotWinOnVerticalLine() {
         game = newLineaB();
         assertFalse(placeRedChipsVertically().finished());
     }
 
     @Test
-    public void test30ModeBPlayerBlueDoesNotWinOnVerticalLine() {
+    public void test31ModeBPlayerBlueDoesNotWinOnVerticalLine() {
         game = newLineaB();
         assertFalse(placeBlueChipsVertically().finished());
     }
 
     @Test
-    public void test31ModeBPlayerRedWinsOnDiagonalLine() {
+    public void test32ModeBPlayerRedWinsOnDiagonalLine() {
         game = newLineaB();
         assertEquals(redWinsStatus(), placeRedChipsDiagonally().getStatus());
     }
 
     @Test
-    public void test32ModeBPlayerBlueWinsOnDiagonalLine() {
+    public void test33ModeBPlayerBlueWinsOnDiagonalLine() {
         game = newLineaB();
         assertEquals(blueWinsStatus(), placeBlueChipsDiagonally().getStatus());
     }
 
     @Test
-    public void test33ModeBGameCanFinishOnDrawIfNoneWins() {
+    public void test34ModeBGameCanFinishOnDrawIfNoneWins() {
         game = newLineaB();
         assertEquals(drawStatus(), playDraw().getStatus());
     }
 
     @Test
-    public void test34ModeCPlayerRedWinsOnHorizontalLine() {
+    public void test35ModeCPlayerRedWinsOnHorizontalLine() {
         game = newLineaC();
         assertEquals(redWinsStatus(), placeRedChipsHorizontally().getStatus());
     }
 
     @Test
-    public void test35ModeCPlayerBlueWinsOnHorizontalLine() {
+    public void test36ModeCPlayerBlueWinsOnHorizontalLine() {
         game = newLineaC();
         assertEquals(blueWinsStatus(), placeBlueChipsHorizontally().getStatus());
     }
 
     @Test
-    public void test36ModeCPlayerRedWinsOnVerticalLine() {
+    public void test37ModeCPlayerRedWinsOnVerticalLine() {
         game = newLineaC();
         assertEquals(redWinsStatus(), placeRedChipsVertically().getStatus());
     }
 
     @Test
-    public void test37ModeCPlayerBlueWinsOnVerticalLine() {
+    public void test38ModeCPlayerBlueWinsOnVerticalLine() {
         game = newLineaC();
         assertEquals(blueWinsStatus(), placeBlueChipsVertically().getStatus());
     }
 
     @Test
-    public void test38ModeCPlayerRedWinsOnDiagonalLine() {
+    public void test39ModeCPlayerRedWinsOnDiagonalLine() {
         game = newLineaC();
         assertEquals(redWinsStatus(), placeRedChipsDiagonally().getStatus());
     }
 
     @Test
-    public void test39ModeCPlayerBlueWinsOnDiagonalLine() {
+    public void test40ModeCPlayerBlueWinsOnDiagonalLine() {
         game = newLineaC();
         assertEquals(blueWinsStatus(), placeBlueChipsDiagonally().getStatus());
     }
 
     @Test
-    public void test40ModeCGameCanFinishOnDrawIfNoneWins() {
+    public void test41ModeCGameCanFinishOnDrawIfNoneWins() {
         game = newLineaC();
         assertEquals(drawStatus(), playDraw().getStatus());
     }
 
     @Test
-    public void test41BlueWinsDiagonallyIn6x6Board() {
+    public void test42BlueWinsDiagonallyIn6x6Board() {
         game = new Linea(6, 6, 'C');
         assertTrue(playGame(1, 2, 2, 3, 4, 3, 3, 4, 3, 4, 2, 5, 5, 5, 1, 5).finished());
+    }
+
+    @Test
+    public void test43CantPlaceChipsWhenGameIsFinished() {
+        placeRedChipsVertically();
+        assertTrue(game.finished());
+        assertThrowsError(() -> game.playRedAt(1), "The game has finished!");
+        assertThrowsError(() -> game.playBlueAt(1), "The game has finished!");
+    }
+
+    @Test
+    public void test44CantPlaceChipsWhenGameIsFinishedInDraw() {
+        playDraw();
+        assertTrue(game.finished());
+        assertThrowsError(() -> game.playRedAt(1), "The game has finished in a Draw!");
+        assertThrowsError(() -> game.playBlueAt(1), "The game has finished in a Draw!");
     }
 
     private Linea placeRedChipsHorizontally() { return playGame(1, 1, 2, 2, 3, 3, 4); }
@@ -357,7 +381,7 @@ public class LineaTest {
 
     private void assertThrowsError( Executable runnable, String expectedError ) {
         String actualError = assertThrows(RuntimeException.class, runnable, "Expected Error was not thrown.").getMessage();
-        assertEquals(actualError, expectedError);
+        assertEquals(expectedError, actualError);
     }
 
     public GameManager redWinsStatus() { return new GameFinished('X'); }
