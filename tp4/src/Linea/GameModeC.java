@@ -8,6 +8,8 @@ public class GameModeC extends GameMode {
 
     @Override
     public boolean checkVictory(char slotSymbol, Linea game) {
-        return checkHorizontalVictory(slotSymbol, game) || checkVerticalVictory(slotSymbol, game) || checkDiagonalVictory(slotSymbol, game);
+        return game.checkHorizontalVictory(slotSymbol) ||
+               game.checkVerticalVictory(slotSymbol) ||
+               game.checkDiagonalVictory(slotSymbol);
     }
 }

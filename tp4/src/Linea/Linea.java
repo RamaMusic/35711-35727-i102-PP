@@ -87,6 +87,31 @@ public class Linea {
         return "\n" + board_content + bottom_border + "\n" + numbers + bottom_status;
     }
 
+    public boolean checkVerticalVictory(char slotSymbol) {
+        return IntStream.range(0, this.getBase())
+                .anyMatch(column -> IntStream.range(0, this.getHeight() - 3)
+                        .anyMatch(row -> IntStream.range(0, 4)
+                                .allMatch(i -> this.getCharAtPosition(row + i, column) == slotSymbol)));
+    }
+
+    public boolean checkHorizontalVictory(char slotSymbol) {
+        return IntStream.range(0, this.getHeight())
+                .anyMatch(row -> IntStream.range(0, this.getBase() - 3)
+                        .anyMatch(column -> IntStream.range(0, 4)
+                                .allMatch(i -> this.getCharAtPosition(row, column + i) == slotSymbol)));
+    }
+
+    public boolean checkDiagonalVictory(char slotSymbol) {
+        return IntStream.range(0, this.getHeight() - 3)
+                .anyMatch(row -> IntStream.range(0, this.getBase() - 3)
+                        .anyMatch(column -> IntStream.range(0, 4)
+                                .allMatch(i -> this.getCharAtPosition(row + i, column + i) == slotSymbol)))
+                || IntStream.range(0, this.getHeight() - 3)
+                .anyMatch(row -> IntStream.range(3, this.getBase())
+                        .anyMatch(column -> IntStream.range(0, 4)
+                                .allMatch(i -> this.getCharAtPosition(row + i, column - i) == slotSymbol)));
+    }
+
     private void verifyIfGameHasEnded(char slot) { if ( this.finished) { this.gameState = new GameFinished( slot ); } }
 
     private boolean isColumnInBounds(int desiredColumn) { return desiredColumn >= 0 && desiredColumn < this.base; }
