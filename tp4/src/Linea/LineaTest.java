@@ -19,9 +19,7 @@ public class LineaTest {
     private Linea game;
 
     @BeforeEach
-    public void setUp() {
-        game = new Linea( 4,4,'A' );
-    }
+    public void setUp() { game = new Linea( 4,4,'A' ); }
 
     @AfterEach
     public void printGame() { System.out.println(game.show()); }
@@ -337,23 +335,19 @@ public class LineaTest {
     @Test
     public void test42BlueWinsDiagonallyIn6x6Board() {
         game = new Linea(6, 6, 'C');
-        assertTrue(playGame(1, 2, 2, 3, 4, 3, 3, 4, 3, 4, 2, 5, 5, 5, 1, 5).finished());
+        assertEquals(blueWinsStatus(), playGame(1, 2, 2, 3, 4, 3, 3, 4, 3, 4, 2, 5, 5, 5, 1, 5).getStatus());
     }
 
     @Test
     public void test43CantPlaceChipsWhenGameIsFinished() {
         placeRedChipsVertically();
-        assertTrue(game.finished());
-        assertThrowsError(() -> game.playRedAt(1), "The game has finished!");
-        assertThrowsError(() -> game.playBlueAt(1), "The game has finished!");
+        assertGameFinishedAndThrowsErrorForBothColors("The game has finished!");
     }
 
     @Test
     public void test44CantPlaceChipsWhenGameIsFinishedInDraw() {
         playDraw();
-        assertTrue(game.finished());
-        assertThrowsError(() -> game.playRedAt(1), "The game has finished in a Draw!");
-        assertThrowsError(() -> game.playBlueAt(1), "The game has finished in a Draw!");
+        assertGameFinishedAndThrowsErrorForBothColors("The game has finished in a Draw!");
     }
 
     private Linea placeRedChipsHorizontally() { return playGame(1, 1, 2, 2, 3, 3, 4); }
@@ -384,12 +378,16 @@ public class LineaTest {
         assertEquals(expectedError, actualError);
     }
 
+    private void assertGameFinishedAndThrowsErrorForBothColors(String expectedError) {
+        assertTrue(game.finished());
+        assertThrowsError(() -> game.playRedAt(1), expectedError);
+        assertThrowsError(() -> game.playBlueAt(1), expectedError);
+    }
+
     public GameManager redWinsStatus() { return new GameFinished('X'); }
-
     public GameManager blueWinsStatus() { return new GameFinished('O'); }
-
     public GameManager drawStatus() { return new Draw(); }
-    private Linea newLineaB() { return new Linea(4, 4, 'B'); }
 
+    private Linea newLineaB() { return new Linea(4, 4, 'B'); }
     private Linea newLineaC() { return new Linea(4, 4, 'C'); }
 }
